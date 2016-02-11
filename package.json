@@ -1,0 +1,21 @@
+{
+  "name": "react-ava-workshop",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kentcdodds/react-ava-workshop.git"
+  },
+  "keywords": [],
+  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kentcdodds/react-ava-workshop/issues"
+  },
+  "homepage": "https://github.com/kentcdodds/react-ava-workshop#readme"
+}
