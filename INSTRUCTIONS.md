@@ -482,6 +482,7 @@ test('invokes the onToggle prop when clicked', t => {
   // validate the div's `innerHTML` includes the right class
   // validate your onToggle spy was called (only once)
   // validate your onToggle spy was called with the right state (true/false)
+  t.fail() // remove this
 })
 ```
 
@@ -593,6 +594,7 @@ import CustomerList from './CustomerList'
 test('Renders no customers and add button', t => {
   // normal props test. Use renderToStaticMarkup and test the output when you pass no props
   // verify that it includes 'no customers' and doesn't include 'list of customers'
+  t.fail() // remove this
 })
 
 test('Renders customers and add button', t => {
@@ -604,6 +606,7 @@ test('Renders customers and add button', t => {
   // then assert that the output includes 'list of customers'
   // assert your output includes the names of each of your customers
   // assert that your output doesn't include 'no customers'
+  t.fail() // remove this
 })
 
 test('Responds to store updates', t => {
@@ -623,6 +626,7 @@ test('Responds to store updates', t => {
   // it includes 'list of customers'
   // it includes the names of each of your customers
   // it does not include 'no customers'
+  t.fail() // remove this
 })
 
 test('unsubscribes when unmounted', t => {
@@ -632,6 +636,7 @@ test('unsubscribes when unmounted', t => {
   // still render it into a div
   // But then you can immediately unmount it by calling unmountComponentAtNode (from 'react-dom')
   // then assert that your unsubscribe spy was called
+  t.fail() // remove this
 })
 ```
 
