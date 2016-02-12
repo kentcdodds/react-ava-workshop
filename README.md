@@ -1,4 +1,4 @@
-# React + AVA = ❤️
+# [React](https://facebook.github.io/react/) + [AVA](https://npmjs.org/package/ava) = ❤️
 
 Find slides [here](http://kcd.im/react-ava)
 
