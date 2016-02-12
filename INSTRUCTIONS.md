@@ -1,5 +1,12 @@
 # Instructions
 
+If you'd like to follow along:
+
+1. `$ git clone https://github.com/kentcdodds/react-ava-workshop.git`
+2. `$ cd react-ava-workshop`
+3. `$ git checkout start`
+4. `$ npm install`
+
 You'll notice that this repository is already (mostly) set up for a React project.
 It's a bit contrived and doesn't actually amount to anything but a couple
 disconnected components and a fairly worthless (non-flux) store.
