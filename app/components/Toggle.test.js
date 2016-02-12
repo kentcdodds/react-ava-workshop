@@ -21,10 +21,8 @@ test('toggle--on class applied when initialToggledOn specified to true', t => {
 test('invokes the onToggle prop when clicked', t => {
   const onToggle = sinon.spy()
   const div = renderToDiv({onToggle})
-  const before = div.innerHTML
   const button = div.querySelector('button')
   Simulate.click(button)
-  const after = div.innerHTML
 
   t.true(div.innerHTML.includes('toggle--on'))
   t.true(onToggle.calledOnce)

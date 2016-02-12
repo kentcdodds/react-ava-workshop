@@ -3,7 +3,7 @@ import sinon from 'sinon'
 
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
-import {render} from 'react-dom'
+import {render, unmountComponentAtNode} from 'react-dom'
 
 import CustomerList from './CustomerList'
 
@@ -25,21 +25,41 @@ test('Renders customers and add button', t => {
 })
 
 test('Responds to store updates', t => {
-  let callback
-  let customers = []
-  const store = {
-    getCustomers: () => customers,
-    subscribe: cb => callback = cb
-  }
+  const {ref, store} = getStoreStub()
   const div = renderToDiv({store})
-  customers = [{name: 'Jill'}, {name: 'Fred'}]
-  callback()
+  ref.customers = [{name: 'Jill'}, {name: 'Fred'}]
+  ref.callback()
   const {innerHTML} = div
   t.true(innerHTML.includes('list of customers'))
   t.true(innerHTML.includes('Jill'))
   t.true(innerHTML.includes('Fred'))
   t.false(innerHTML.includes('no customers'))
 })
+
+test('unsubscribes when unmounted', t => {
+  const {ref, store} = getStoreStub()
+  const div = renderToDiv({store})
+  unmountComponentAtNode(div)
+  t.true(ref.unsubscribe.calledOnce)
+})
+
+
+/**
+ * Create a stub for the store which can be used for assertions
+ * @returns {Object} - ref property has customers and will haf ref.callback when store.callback is invoked. store.getCustomers will return ref.customers
+ */
+function getStoreStub() {
+  const unsubscribe = sinon.spy()
+  const ref = {customers: [], unsubscribe}
+  const store = {
+    getCustomers: () => ref.customers,
+    subscribe: cb => {
+      ref.callback = cb
+      return ref.unsubscribe
+    }
+  }
+  return {ref, store}
+}
 
 
 /**

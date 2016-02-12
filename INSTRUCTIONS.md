@@ -571,4 +571,125 @@ If you look at the currently implementation of `CustomerList` in the
 🐯 Your task is to update `CustomerList.js` component to use `defaultProps` instead
 and reference the store via `props.store`.
 
-Once you've finished that
+🐯 Once you've finished that, paste this into the `CustomerList.test.js` file:
+
+```javascript
+import test from 'ava'
+import sinon from 'sinon'
+
+import React from 'react'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {render, unmountComponentAtNode} from 'react-dom'
+
+import CustomerList from './CustomerList'
+
+test('Renders no customers and add button', t => {
+  // normal props test. Use renderToStaticMarkup and test the output when you pass no props
+  // verify that it includes 'no customers' and doesn't include 'list of customers'
+})
+
+test('Renders customers and add button', t => {
+  // Here's where we need to provide our stubbed store
+  // create an object that has a getCustomers function
+  // which is a spy that wraps a function that returns
+  // an array of at least 2 customers (objects with a name string property)
+  // then use renderToStaticMarkup to get the output
+  // then assert that the output includes 'list of customers'
+  // assert your output includes the names of each of your customers
+  // assert that your output doesn't include 'no customers'
+})
+
+test('Responds to store updates', t => {
+  // this is where we're actually testing the callback to the subscription
+  // the other two tests were pretty much just testing Props
+  // this test covers the Data input
+
+  // declare an uninitialized callback variable
+  // declare a customers variable assigned to an empty array []
+  // create a store with a getCustomers that's a function which returns customers
+  // also add a subscribe function that accepts a cb that simply assigns your callback variable to the given cb
+  // Create a div with document.createElement (as before)
+  // render the CustomerList with your store stub prop into the div
+  // reassign the customers to an array of at least two new customers (objects with a name property)
+  // invoke the callback (which should be assigned by now)
+  // get the innerHTML of the div and assert:
+  // it includes 'list of customers'
+  // it includes the names of each of your customers
+  // it does not include 'no customers'
+})
+
+test('unsubscribes when unmounted', t => {
+  // do many of the same things as above by stubbing the store
+  // this one needs to create a spy that will be returned by the stubbed subscribe method
+  // You don't need to worry about changing customers or invoking the callback
+  // still render it into a div
+  // But then you can immediately unmount it by calling unmountComponentAtNode (from 'react-dom')
+  // then assert that your unsubscribe spy was called
+})
+```
+
+You'll notice that in the last test, you have to use `document.createElement`.
+Good thing we already set up the DOM in our `setup-ava-tests.js` so we can do
+that! The reason we have to is the lifecycle hook `componentDidMount` does not run
+when you use `renderToStaticMarkup` and that's where this component subscribes to
+the store. Same goes for the unsubscription code in `componentWillUnmount`.
+
+For this one, you might consider taking a brief glance at the solution if you get
+stuck. An abstraction can really reduce the shared logic between these tests.
+
+Once you've got everything passing, your output should look like this:
+
+```
+  ✔ store › Customers › customers should start with empty
+  ✔ store › Customers › setting customers and getting them
+  ✔ store › Customers › subscribing to the store
+Warning: Each child in an array or iterator should have a unique "key" prop. Check the render method of `ListOfCustomers`. See https://fb.me/react-warning-keys for more information.
+  ✔ components › Toggle › toggle--off class applied by default
+  ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
+  ✔ components › Toggle › invokes the onToggle prop when clicked
+  ✔ containers › CustomerList › Renders no customers and add button
+  ✔ containers › CustomerList › Renders customers and add button
+  ✔ containers › CustomerList › Responds to store updates
+  ✔ containers › CustomerList › unsubscribes when unmounted
+
+  10 tests passed
+
+------------------|----------|----------|----------|----------|----------------|
+File              |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+------------------|----------|----------|----------|----------|----------------|
+ components/      |      100 |      100 |      100 |      100 |                |
+  Toggle.js       |      100 |      100 |      100 |      100 |                |
+ containers/      |      100 |      100 |      100 |      100 |                |
+  CustomerList.js |      100 |      100 |      100 |      100 |                |
+ store/           |      100 |      100 |      100 |      100 |                |
+  Customers.js    |      100 |      100 |      100 |      100 |                |
+------------------|----------|----------|----------|----------|----------------|
+All files         |      100 |      100 |      100 |      100 |                |
+------------------|----------|----------|----------|----------|----------------|
+```
+
+If it does, celebrate! Congratulations! That's it!
+
+## Wrapping up
+
+I hope this was helpful to you! If you have suggestions on improvements, feel
+free to [makeapullrequest.com](http://makeapullrequest.com) :-)
+
+🐯 See you on the twittersphere! [@kentcdodds](https://twitter.com/kentcdodds)
+
+---
+
+## Appendix
+
+### Redux
+
+You may be wondering, "how do I test components that use Redux?" Well, this repo
+doesn't really show that, but it's because it's pretty much exactly how you do
+a normal `Props` input test because if you're using `connect` from `react-redux`
+then you simply `export` the component that you're wrapping in `connect` for
+testing purposes, and just test that the same way you do other components with
+`Props` inputs.
+
+If you're not using `connect` and you're subscribing to it yourself, then you'll
+simply treat it like the `Data` input test where you accept the store as a prop
+and add an item in `defaultProps` for the actual store singleton.

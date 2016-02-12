@@ -9,11 +9,14 @@ class CustomerList extends React.Component {
     }
   }
   componentDidMount() {
-    this.props.store.subscribe(() => {
+    this.unsubscribe = this.props.store.subscribe(() => {
       this.setState({
         customers: this.props.store.getCustomers()
       })
     })
+  }
+  componentWillUnmount() {
+    this.unsubscribe()
   }
   render() {
     const {customers} = this.state
