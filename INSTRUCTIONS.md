@@ -12,9 +12,9 @@ project including `babel-core` and friends, `react` (and friends), and
 `eslint`... and friends. However, to get our tests going, we're going to need
 a few more dependencies:
 
-🐯 - Hi! I'm Terry the Tiger! These instructions are really long and boring! So
-I'll pop up here and there where you'll be expected to actually do something!
-See you around!
+🐯 *- Hi! I'm Terry the Tiger! These instructions are really long and boring! So*
+*I'll pop up here and there where you'll be expected to actually do something!*
+*See you around!*
 
 ## AVA
 
