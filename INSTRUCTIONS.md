@@ -52,11 +52,13 @@ Now go ahead and run `npm run test`
 
 You should get output that looks like this:
 
->   ✔ components › Toggle › empty test
->   ✔ store › Customers › empty test
->   ✔ containers › CustomerList › empty test
-> 
->   3 tests passed
+```
+  ✔ components › Toggle › empty test
+  ✔ store › Customers › empty test
+  ✔ containers › CustomerList › empty test
+
+  3 tests passed
+```
 
 Great! Let's move on to our next dependency.
 
@@ -129,12 +131,14 @@ coverage:
 
 Let's run `npm run cover` now to see our coverage. You should see this output:
 
-> ----------|----------|----------|----------|----------|----------------|
-> File      |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
-> ----------|----------|----------|----------|----------|----------------|
-> ----------|----------|----------|----------|----------|----------------|
-> All files |      100 |      100 |      100 |      100 |                |
-> ----------|----------|----------|----------|----------|----------------|
+```
+----------|----------|----------|----------|----------|----------------|
+File      |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+----------|----------|----------|----------|----------|----------------|
+----------|----------|----------|----------|----------|----------------|
+All files |      100 |      100 |      100 |      100 |                |
+----------|----------|----------|----------|----------|----------------|
+```
 
 This is great! Just kidding. We aren't importing any files to actually record code
 coverage on yet, so we have 100% of nothing covered. We'll get there!
@@ -190,8 +194,9 @@ test('empty test', t => t.pass())
 
 Now try to run `npm run test` and you'll get output with this error message:
 
-> SyntaxError: Block-scoped declarations (let, const, function, class) not yet
-> supported outside strict mode
+```
+SyntaxError: Block-scoped declarations (let, const, function, class) not yet supported outside strict mode
+```
 
 We have to transpile on the fly by ourselves. Having this control over what
 happens to our source code is actually quite nice (even if it means a bit more
@@ -229,25 +234,29 @@ use the `--require` flag like so:
 
 Now if you run the `npm run test` you should get this again:
 
->   ✔ containers › CustomerList › empty test
->   ✔ components › Toggle › empty test
->   ✔ store › Customers › empty test
-> 
->   3 tests passed
+```
+  ✔ containers › CustomerList › empty test
+  ✔ components › Toggle › empty test
+  ✔ store › Customers › empty test
+
+  3 tests passed
+```
 
 Awesome! 🎉 Unfortunately, there's one more thing we need to consider before we're
 all set. Try to run `npm run cover`. You'll get this output:
 
-> ---------------------|----------|----------|----------|----------|----------------|
-> File                 |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
-> ---------------------|----------|----------|----------|----------|----------------|
->  app/store/          |    46.15 |      100 |        0 |    46.15 |                |
->   Customers.js       |    46.15 |      100 |        0 |    46.15 |... 20,21,22,27 |
->  other/              |      100 |      100 |      100 |      100 |                |
->   setup-ava-tests.js |      100 |      100 |      100 |      100 |                |
-> ---------------------|----------|----------|----------|----------|----------------|
-> All files            |    53.33 |      100 |        0 |    53.33 |                |
-> ---------------------|----------|----------|----------|----------|----------------|
+```
+---------------------|----------|----------|----------|----------|----------------|
+File                 |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+---------------------|----------|----------|----------|----------|----------------|
+ app/store/          |    46.15 |      100 |        0 |    46.15 |                |
+  Customers.js       |    46.15 |      100 |        0 |    46.15 |... 20,21,22,27 |
+ other/              |      100 |      100 |      100 |      100 |                |
+  setup-ava-tests.js |      100 |      100 |      100 |      100 |                |
+---------------------|----------|----------|----------|----------|----------------|
+All files            |    53.33 |      100 |        0 |    53.33 |                |
+---------------------|----------|----------|----------|----------|----------------|
+```
 
 I'm not talking about the low coverage on the `Customers.js` file. We'll deal with
 that later. I'm talking about the coverage being recorded on our `setup-ava-tests`
@@ -274,14 +283,16 @@ the root of your `package.json` object:
 
 Now run `npm run cover` again and you'll see that the report excludes `other/`
 
-> ---------------|----------|----------|----------|----------|----------------|
-> File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
-> ---------------|----------|----------|----------|----------|----------------|
->  store/        |    46.15 |      100 |        0 |    46.15 |                |
->   Customers.js |    46.15 |      100 |        0 |    46.15 |... 20,21,22,27 |
-> ---------------|----------|----------|----------|----------|----------------|
-> All files      |    46.15 |      100 |        0 |    46.15 |                |
-> ---------------|----------|----------|----------|----------|----------------|
+```
+---------------|----------|----------|----------|----------|----------------|
+File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+---------------|----------|----------|----------|----------|----------------|
+ store/        |    46.15 |      100 |        0 |    46.15 |                |
+  Customers.js |    46.15 |      100 |        0 |    46.15 |... 20,21,22,27 |
+---------------|----------|----------|----------|----------|----------------|
+All files      |    46.15 |      100 |        0 |    46.15 |                |
+---------------|----------|----------|----------|----------|----------------|
+```
 
 Like I said, we'll deal with the coverage numbers later. Like... right now!!!
 
@@ -341,22 +352,24 @@ comment at the bottom about adding an `afterEach`. Look up how to do that
 
 Once you're all done, your output should look like this:
 
->   ✔ components › Toggle › empty test
->   ✔ containers › CustomerList › empty test
->   ✔ store › Customers › customers should start with empty
->   ✔ store › Customers › setting customers and getting them
->   ✔ store › Customers › subscribing to the store
-> 
->   5 tests passed
-> 
-> ---------------|----------|----------|----------|----------|----------------|
-> File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
-> ---------------|----------|----------|----------|----------|----------------|
->  store/        |      100 |      100 |      100 |      100 |                |
->   Customers.js |      100 |      100 |      100 |      100 |                |
-> ---------------|----------|----------|----------|----------|----------------|
-> All files      |      100 |      100 |      100 |      100 |                |
-> ---------------|----------|----------|----------|----------|----------------|
+```
+  ✔ components › Toggle › empty test
+  ✔ containers › CustomerList › empty test
+  ✔ store › Customers › customers should start with empty
+  ✔ store › Customers › setting customers and getting them
+  ✔ store › Customers › subscribing to the store
+
+  5 tests passed
+
+---------------|----------|----------|----------|----------|----------------|
+File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+---------------|----------|----------|----------|----------|----------------|
+ store/        |      100 |      100 |      100 |      100 |                |
+  Customers.js |      100 |      100 |      100 |      100 |                |
+---------------|----------|----------|----------|----------|----------------|
+All files      |      100 |      100 |      100 |      100 |                |
+---------------|----------|----------|----------|----------|----------------|
+```
 
 😎 stellar!
 
@@ -412,25 +425,27 @@ test('toggle--on class applied when initialToggledOn specified to true', t => {
 Simple enough right? Once you have this working, your `npm run cover` output
 should look like:
 
->   ✔ containers › CustomerList › empty test
->   ✔ store › Customers › customers should start with empty
->   ✔ store › Customers › setting customers and getting them
->   ✔ store › Customers › subscribing to the store
->   ✔ components › Toggle › toggle--off class applied by default
->   ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
-> 
->   6 tests passed
-> 
-> ---------------|----------|----------|----------|----------|----------------|
-> File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
-> ---------------|----------|----------|----------|----------|----------------|
->  components/   |    66.67 |      100 |    66.67 |    66.67 |                |
->   Toggle.js    |    66.67 |      100 |    66.67 |    66.67 |       11,12,13 |
->  store/        |      100 |      100 |      100 |      100 |                |
->   Customers.js |      100 |      100 |      100 |      100 |                |
-> ---------------|----------|----------|----------|----------|----------------|
-> All files      |    86.36 |      100 |    88.89 |    86.36 |                |
-> ---------------|----------|----------|----------|----------|----------------|
+```
+  ✔ containers › CustomerList › empty test
+  ✔ store › Customers › customers should start with empty
+  ✔ store › Customers › setting customers and getting them
+  ✔ store › Customers › subscribing to the store
+  ✔ components › Toggle › toggle--off class applied by default
+  ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
+
+  6 tests passed
+
+---------------|----------|----------|----------|----------|----------------|
+File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+---------------|----------|----------|----------|----------|----------------|
+ components/   |    66.67 |      100 |    66.67 |    66.67 |                |
+  Toggle.js    |    66.67 |      100 |    66.67 |    66.67 |       11,12,13 |
+ store/        |      100 |      100 |      100 |      100 |                |
+  Customers.js |      100 |      100 |      100 |      100 |                |
+---------------|----------|----------|----------|----------|----------------|
+All files      |    86.36 |      100 |    88.89 |    86.36 |                |
+---------------|----------|----------|----------|----------|----------------|
+```
 
 We're missing coverage on the `handleToggleClick` lines. So far, we've only tested
 changing the `Props` input to our component. Now we need to simulate the `User`
@@ -502,26 +517,28 @@ Once you have your tests implemented, your `npm run cover` output should look
 like this:
 
 
->   ✔ containers › CustomerList › empty test
->   ✔ store › Customers › customers should start with empty
->   ✔ store › Customers › setting customers and getting them
->   ✔ store › Customers › subscribing to the store
->   ✔ components › Toggle › toggle--off class applied by default
->   ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
->   ✔ components › Toggle › invokes the onToggle prop when clicked
-> 
->   7 tests passed
-> 
-> ---------------|----------|----------|----------|----------|----------------|
-> File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
-> ---------------|----------|----------|----------|----------|----------------|
->  components/   |      100 |      100 |      100 |      100 |                |
->   Toggle.js    |      100 |      100 |      100 |      100 |                |
->  store/        |      100 |      100 |      100 |      100 |                |
->   Customers.js |      100 |      100 |      100 |      100 |                |
-> ---------------|----------|----------|----------|----------|----------------|
-> All files      |      100 |      100 |      100 |      100 |                |
-> ---------------|----------|----------|----------|----------|----------------|
+```
+  ✔ containers › CustomerList › empty test
+  ✔ store › Customers › customers should start with empty
+  ✔ store › Customers › setting customers and getting them
+  ✔ store › Customers › subscribing to the store
+  ✔ components › Toggle › toggle--off class applied by default
+  ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
+  ✔ components › Toggle › invokes the onToggle prop when clicked
+
+  7 tests passed
+
+---------------|----------|----------|----------|----------|----------------|
+File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+---------------|----------|----------|----------|----------|----------------|
+ components/   |      100 |      100 |      100 |      100 |                |
+  Toggle.js    |      100 |      100 |      100 |      100 |                |
+ store/        |      100 |      100 |      100 |      100 |                |
+  Customers.js |      100 |      100 |      100 |      100 |                |
+---------------|----------|----------|----------|----------|----------------|
+All files      |      100 |      100 |      100 |      100 |                |
+---------------|----------|----------|----------|----------|----------------|
+```
 
 🔥🔥🔥 awesome!
 
