@@ -14,7 +14,8 @@ a few more dependencies:
 
 🐯 *- Hi! I'm Terry the Tiger! These instructions are really long and boring! So*
 *I'll pop up here and there where you'll be expected to actually do something!*
-*See you around!*
+*And if you really want to skip around, just copy me and <kbd>⌘</kbd>+<kbd>f</kbd>*
+*(or <kbd>CTRL</kbd>+<kbd>f</kbd> on windows) for me on the page. See you around!*
 
 ## AVA
 
