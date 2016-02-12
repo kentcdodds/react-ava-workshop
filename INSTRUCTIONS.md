@@ -497,7 +497,7 @@ It just takes installing and getting set up for each of our tests. 🐯 Let's in
 the latest version (`8.0.2` at the time of this writing).
 
 ```
-npm install --save-dev jsdom@8.0.2
+npm install --save-dev jsdom
 ```
 
 With that installed, now we need each one of our tests to have the global
