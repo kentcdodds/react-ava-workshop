@@ -1,8 +1,5 @@
 # Instructions
 
-This file will be updated for each step, when you've finished each step, come back
-to this file and see the instructions for the next step.
-
 You'll notice that this repository is already (mostly) set up for a React project.
 It's a bit contrived and doesn't actually amount to anything but a couple
 disconnected components and a fairly worthless (non-flux) store.
@@ -14,6 +11,10 @@ We already have many of the same dependencies you would have in a normal react
 project including `babel-core` and friends, `react` (and friends), and
 `eslint`... and friends. However, to get our tests going, we're going to need
 a few more dependencies:
+
+🐯 - Hi! I'm Terry the Tiger! These instructions are really long and boring! So
+I'll pop up here and there where you'll be expected to actually do something!
+See you around!
 
 ## AVA
 
@@ -27,7 +28,7 @@ A solution for has [been discussed](https://github.com/sindresorhus/ava/issues/4
 and will (hopefully) be implemented soon. However, in the mean time. You'll have
 to install an old version of `ava` if you want to use `jsx` in your test files.
 
-To install the `ava` module, go ahead with:
+🐯 To install the `ava` module, go ahead with:
 
 ```
 npm install --save-dev ava@0.9.2
@@ -36,7 +37,7 @@ npm install --save-dev ava@0.9.2
 This will install it and add it to your `package.json` `devDependencies`.
 
 Now we can add a `test` script which will utilize AVA to run the tests in our
-`app/` directory with the filename ending in `.test.js`. Add this to the
+`app/` directory with the filename ending in `.test.js`. 🐯 Add this to the
 `scripts` object in your `package.json`.
 
 ```javascript
@@ -46,7 +47,7 @@ Now we can add a `test` script which will utilize AVA to run the tests in our
 - `'app/**/*.test.js'` - a [glob](http://npm.im/glob) which matches our tests
 - `--verbose` to get more information and preserve our `console.log`s
 
-Now go ahead and run `npm run test`
+🐯 Now go ahead and run `npm run test`
 
 > protip: `npm run test` `===` `npm test` `===` `npm t`
 
@@ -73,7 +74,7 @@ Test-Driven-Development. **NOTE** check
 can use the latest version. If you can, you can skip this entire section and just
 use the built-in `watch` functionality.
 
-The `nodemon` module will work great for what we need. You can simply install the
+The `nodemon` module will work great for what we need. 🐯 You can simply install the
 latest version (`1.8.1` at the time of this writing):
 
 ```
@@ -83,7 +84,7 @@ npm install --save-dev nodemon
 > protip: `npm install --save-dev` `===` `npm i -D`
 
 Now, we'll add a new script which uses `nodemon` to watch the `app/` directory
-and execute our `test` script whenever files change in that directory. Add this
+and execute our `test` script whenever files change in that directory. 🐯 Add this
 to the `scripts` object in your `package.json`.
 
 ```javascript
@@ -95,7 +96,7 @@ to the `scripts` object in your `package.json`.
 - `--exect` -> run the following command when a relevant file has changed
 - `-s` -> to reduce the output in our terminal from `npm`
 
-Now if you run `npm run watch:test`, you should see the same output as before, but
+🐯 Now if you run `npm run watch:test`, you should see the same output as before, but
 the process wont exit. Now try to change one of the files in the `app/` directory
 (add a newline) and the tests should re-run.
 
@@ -103,21 +104,21 @@ the process wont exit. Now try to change one of the files in the `app/` director
 >
 > protip: Install [`npm-run`](http://npm.im/npm-run) while working with local npm-installed binaries
 
-Now stop the process with <kbd>CTL</kbd>+<kbd>c</kbd>
+🐯 Now stop the process with <kbd>CTL</kbd>+<kbd>c</kbd>
 
 ## nyc
 
 The most popular and widely used tool for code coverage is `istanbul`.
 Unfortunately `istanbul` doesn't support covering tests run in subprocesses. It
 also doesn't support covering `ES6` code that's transpiled with `babel`. This is
-the problem that `nyc` solves. It also has an incredibly slick API. Let's go ahead
+the problem that `nyc` solves. It also has an incredibly slick API. 🐯 Let's go ahead
 and install the latest version (`5.6.0` at the time of this writing):
 
 ```
 npm install --save-dev nyc
 ```
 
-Now let's add a script in the `scripts` of our `package.json` to record code
+🐯 Now let's add a script in the `scripts` of our `package.json` to record code
 coverage:
 
 ```javascript
@@ -129,7 +130,7 @@ coverage:
 - `--reporter=html` - To get output as a static HTML page viewing with our browser
 - `npm run test` - The script to execute to run the tests we want to cover
 
-Let's run `npm run cover` now to see our coverage. You should see this output:
+🐯 Let's run `npm run cover` now to see our coverage. You should see this output:
 
 ```
 ----------|----------|----------|----------|----------|----------------|
@@ -152,7 +153,7 @@ You'll want to make sure that you add these to your `.gitignore` file as they're
 generated files and have no place in a version control system. I've already done
 this for you. Just don't forget to do this in your own projects.
 
-While we're here, let's add a `watch` mode for coverage just for kicks:
+🐯 While we're here, let's add a `watch` mode for coverage just for kicks:
 
 ```
 "watch:cover": "nodemon --quiet --watch app --exec npm run cover -s"
@@ -160,7 +161,7 @@ While we're here, let's add a `watch` mode for coverage just for kicks:
 
 This looks pretty much the same as our `watch:test` we did earlier.
 
-Finally, one other thing that we'll add to our scripts that's kind of handy from
+🐯 Finally, one other thing that we'll add to our scripts that's kind of handy from
 `nyc` is the ability to validate a level of code coverage percentages:
 
 ```
@@ -182,7 +183,7 @@ However, in your project, something more like `%70` or so may be more reasonable
 So far, we haven't actually tested anything. All of our tests are totally empty.
 One thing that we're about to discover as we start importing our modules into our
 tests is that AVA wont transpile them with `babel` for us. Let's see what I mean.
-Go ahead and open the `Customers.test.js` file in the `app/store/` directory and
+🐯 Go ahead and open the `Customers.test.js` file in the `app/store/` directory and
 put this in it:
 
 ```javascript
@@ -192,7 +193,7 @@ import store from './Customers'
 test('empty test', t => t.pass())
 ```
 
-Now try to run `npm run test` and you'll get output with this error message:
+🐯 Now try to run `npm run test` and you'll get output with this error message:
 
 ```
 SyntaxError: Block-scoped declarations (let, const, function, class) not yet supported outside strict mode
@@ -202,7 +203,7 @@ We have to transpile on the fly by ourselves. Having this control over what
 happens to our source code is actually quite nice (even if it means a bit more
 work for us).
 
-So we need to transpile this code on the fly using `babel-register`, so let's go
+So we need to transpile this code on the fly using `babel-register`, 🐯 so let's go
 ahead and install the latest version (`6.5.1` at the time of this writing) of
 that now:
 
@@ -217,7 +218,7 @@ instead of just using `--require babel-register`, we're going to add a new file
 to do this for us because we're going to add more environment setup code in there
 soon.
 
-So create a new file in the `other/` directory called `setup-ava-tests.js` and
+🐯 So create a new file in the `other/` directory called `setup-ava-tests.js` and
 place this in there:
 
 ```javascript
@@ -225,14 +226,14 @@ require('babel-register')
 require('babel-polyfill') // this has already been installed. May as well :-)
 ```
 
-Now, update the `test` script in the `scripts` object of your `package.json` to
+🐯 Now, update the `test` script in the `scripts` object of your `package.json` to
 use the `--require` flag like so:
 
 ```javascript
 "test": "ava 'app/**/*.test.js' --verbose --require ./other/setup-ava-tests.js"
 ```
 
-Now if you run the `npm run test` you should get this again:
+🐯 Now if you run the `npm run test` you should get this again:
 
 ```
   ✔ containers › CustomerList › empty test
@@ -243,7 +244,7 @@ Now if you run the `npm run test` you should get this again:
 ```
 
 Awesome! 🎉 Unfortunately, there's one more thing we need to consider before we're
-all set. Try to run `npm run cover`. You'll get this output:
+all set. 🐯 Try to run `npm run cover`. You'll get this output:
 
 ```
 ---------------------|----------|----------|----------|----------|----------------|
@@ -268,7 +269,7 @@ many methods available for ignoring code with `istanbul`
 ([learn more](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md)),
 or we can configure `nyc` to exclude specific `glob`s. We'll do the later.
 
-`nyc` configuration happens in the `package.json` file. Add an `nyc` property to
+`nyc` configuration happens in the `package.json` file. 🐯 Add an `nyc` property to
 the root of your `package.json` object:
 
 ```javascript
@@ -281,7 +282,7 @@ the root of your `package.json` object:
 
 - `exclude` - an array of globs that should be excluded from coverage instrumentation
 
-Now run `npm run cover` again and you'll see that the report excludes `other/`
+🐯 Now run `npm run cover` again and you'll see that the report excludes `other/`
 
 ```
 ---------------|----------|----------|----------|----------|----------------|
@@ -308,7 +309,7 @@ There are three APIs exposed from `Customer.js` that we'll be wanting to test:
 - `setCustomers`
 - `subscribe`
 
-Each is documented using JSDoc. Go ahead and copy this into the `Customer.test.js`
+Each is documented using JSDoc. 🐯 Go ahead and copy this into the `Customer.test.js`
 file and follow the instructions in the comments:
 
 ```javascript
@@ -344,7 +345,7 @@ test('subscribing to the store', t => {
 // add an afterEach here to reset the customers to an empty array
 ```
 
-With that copied into the file, I recommend you run: `npm run watch:cover` to have
+🐯 With that copied into the file, I recommend you run: `npm run watch:cover` to have
 the tests run while you're updating the file. Now go ahead and implement! You
 want to look at the comment by the [`sinon`](http://npm.im/sinon) import and the
 comment at the bottom about adding an `afterEach`. Look up how to do that
@@ -398,7 +399,7 @@ and render it into its pure HTML form. We'll then make assertions that the outpu
 contains the pieces that we're looking for. This approach definitely comes with
 trade-offs, but its pros outweigh its cons.
 
-Go ahead and open `Toggle.test.js` in `app/components/` and paste this in:
+🐯 Go ahead and open `Toggle.test.js` in `app/components/` and paste this in:
 
 ```javascript
 import test from 'ava'
@@ -453,14 +454,14 @@ input.
 
 To do this, we'll leverage React's Synthetic Event system by using the official
 [test utils](https://facebook.github.io/react/docs/test-utils.html):
-`react-addons-test-utils`. Go ahead and install the latest version of this now
+`react-addons-test-utils`. 🐯 Go ahead and install the latest version of this now
 (`0.14.7` is the latest at the time of this writing):
 
 ```
 npm install --save-dev react-addons-test-utils
 ```
 
-With that installed, go ahead and add this test to your `Toggle.test.js` file
+With that installed, 🐯 go ahead and add this test to your `Toggle.test.js` file
 (but don't implement it yet):
 
 ```javascript
@@ -483,7 +484,7 @@ need a DOM. Unfortunately, AVA does not officially support running in the browse
 someone seemed to have success
 [getting AVA to work with karma](https://github.com/angular/angular.js/issues/13971)).
 Luckily we have [jsdom](http://npm.im/jsdom) which works great for our use-case.
-It just takes installing and getting set up for each of our tests. Let's install
+It just takes installing and getting set up for each of our tests. 🐯 Let's install
 the latest version (`8.0.2` at the time of this writing).
 
 ```
@@ -491,7 +492,7 @@ npm install --save-dev jsdom@8.0.2
 ```
 
 With that installed, now we need each one of our tests to have the global
-environment set up with this (because most of our tests will need this). So go
+environment set up with this (because most of our tests will need this). 🐯 So go
 ahead and open the `setup-ava-tests.js` file in the `other/` directory and just
 paste this in:
 
@@ -542,4 +543,31 @@ All files      |      100 |      100 |      100 |      100 |                |
 
 🔥🔥🔥 awesome!
 
+## Test CustomerList.js
 
+So we've successfully tested the `Props` and `User` inputs. Now what do we do
+about `Data` inputs? Well, more and more applications are using the concept of a
+single state tree to manage their data and with abstractions like Redux, you don't
+often have situations where you `setState` in your component directly based on
+changes to data (an abstraction like `react-redux` does this for you). However,
+there are situations where we do invoke `setState` in our components manually,
+and for those situations we need to have a mechanism for triggering that.
+
+The challenge with this is we often depend on
+[singletons](https://en.wikipedia.org/wiki/Singleton_pattern) to store our data
+and subscribe to changes. This makes testing difficult because we either need to
+make a mechanism for resetting the store between tests, or we run the risk of
+tests mucking with the sweet isolation of our tests that we enjoy from AVA.
+
+There is a rather simple solution to this however, it's called `defaultProps` (or,
+if you're using `createClass`, it's called `getDefaultProps`). Rather than just
+importing a singleton store and using it directly, we specify it as a default prop
+and use it from `this.props`. What's nice about this is it allows us to override
+it for our tests.
+
+If you look at the currently implementation of `CustomerList` in the
+`app/containers` directory, you'll see that it is just using the imported store.
+🐯 Your task is to update `CustomerList.js` component to use `defaultProps` instead
+and reference the store via `props.store`.
+
+Once you've finished that
