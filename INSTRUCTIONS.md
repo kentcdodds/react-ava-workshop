@@ -362,4 +362,167 @@ Once you're all done, your output should look like this:
 
 ## Test Toggle.js
 
+Alright! Now we can finally get to testing some React code! As
+[my slides](http://kcd.im/react-ava#/2/2) illustrate, React components have three
+inputs that need to be considered when writing tests:
+
+1. Props
+2. User
+3. Data
+
+In `Toggle.js` we'll be concerned about the `Props` and `User` inputs. We'll cover
+the `Data` input with `CustomerList`.
+
+When testing a React component, it's extremely tempting to go down the path of
+reimplementing the component in the test. Essentially validating that this div
+has a child button which has these attributes and this text. This makes for a
+pretty finicky test suit because anytime you want to refactor the code (not
+actually make any changes visible) you have to update the tests.
+
+Instead we strive to simply test the output itself. So we're going to use the
+function `renderToStaticMarkup` from `react-dom/server` to take a React component
+and render it into its pure HTML form. We'll then make assertions that the output
+contains the pieces that we're looking for. This approach definitely comes with
+trade-offs, but its pros outweigh its cons.
+
+Go ahead and open `Toggle.test.js` in `app/components/` and paste this in:
+
+```javascript
+import test from 'ava'
+import sinon from 'sinon' // you should have installed this in the last step
+
+import React from 'react'
+import {renderToStaticMarkup} from 'react-dom/server'
+
+import Toggle from './Toggle'
+
+test('toggle--off class applied by default', t => {
+  // render <Toggle /> with renderToStaticMarkup and get the output
+  // assert the the output string includes the text for the classname
+  t.fail() // remove this
+})
+
+test('toggle--on class applied when initialToggledOn specified to true', t => {
+  // render <Toggle /> with renderToStaticMarkup and get the output
+  // assert the the output string includes the text for the classname
+  t.fail() // remove this
+})
+```
+
+Simple enough right? Once you have this working, your `npm run cover` output
+should look like:
+
+>   ✔ containers › CustomerList › empty test
+>   ✔ store › Customers › customers should start with empty
+>   ✔ store › Customers › setting customers and getting them
+>   ✔ store › Customers › subscribing to the store
+>   ✔ components › Toggle › toggle--off class applied by default
+>   ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
+> 
+>   6 tests passed
+> 
+> ---------------|----------|----------|----------|----------|----------------|
+> File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+> ---------------|----------|----------|----------|----------|----------------|
+>  components/   |    66.67 |      100 |    66.67 |    66.67 |                |
+>   Toggle.js    |    66.67 |      100 |    66.67 |    66.67 |       11,12,13 |
+>  store/        |      100 |      100 |      100 |      100 |                |
+>   Customers.js |      100 |      100 |      100 |      100 |                |
+> ---------------|----------|----------|----------|----------|----------------|
+> All files      |    86.36 |      100 |    88.89 |    86.36 |                |
+> ---------------|----------|----------|----------|----------|----------------|
+
+We're missing coverage on the `handleToggleClick` lines. So far, we've only tested
+changing the `Props` input to our component. Now we need to simulate the `User`
+input.
+
+To do this, we'll leverage React's Synthetic Event system by using the official
+[test utils](https://facebook.github.io/react/docs/test-utils.html):
+`react-addons-test-utils`. Go ahead and install the latest version of this now
+(`0.14.7` is the latest at the time of this writing):
+
+```
+npm install --save-dev react-addons-test-utils
+```
+
+With that installed, go ahead and add this test to your `Toggle.test.js` file
+(but don't implement it yet):
+
+```javascript
+test('invokes the onToggle prop when clicked', t => {
+  // create a spy to pass in as the onToggle prop (you'll need to import sinon)
+  // use document.createElement to create a div
+  // render <Toggle /> with your onToggle prop into the div using `render` from `react-dom`
+  // get a reference to the button using `div.querySelector`
+  // Use `Simulate.click` from `react-addons-test-utils` to simulate a click event on the `button`
+  // validate the div's `innerHTML` includes the right class
+  // validate your onToggle spy was called (only once)
+  // validate your onToggle spy was called with the right state (true/false)
+})
+```
+
+You'll notice that the instructions require the use of `document.createElement`
+which requires a DOM. That's because when you're simulating the User inputs, you
+need a DOM. Unfortunately, AVA does not officially support running in the browser
+([it's on the roadmap](https://github.com/sindresorhus/ava/issues/24), and
+someone seemed to have success
+[getting AVA to work with karma](https://github.com/angular/angular.js/issues/13971)).
+Luckily we have [jsdom](http://npm.im/jsdom) which works great for our use-case.
+It just takes installing and getting set up for each of our tests. Let's install
+the latest version (`8.0.2` at the time of this writing).
+
+```
+npm install --save-dev jsdom@8.0.2
+```
+
+With that installed, now we need each one of our tests to have the global
+environment set up with this (because most of our tests will need this). So go
+ahead and open the `setup-ava-tests.js` file in the `other/` directory and just
+paste this in:
+
+```javascript
+/**
+ * This is used to set up the environment that's needed for most
+ * of the unit tests for the project which includes babel transpilation
+ * with babel-register, polyfilling, and initializing the DOM with jsdom
+ */
+require('babel-register')
+require('babel-polyfill')
+
+global.document = require('jsdom').jsdom('<body></body>')
+global.window = document.defaultView
+global.navigator = window.navigator
+```
+
+Now, because we've configured AVA to `--require` this file, next time our tests
+run, they'll have this environment set up for them and have access to the global
+`document` for creating elements. Which is what you need to do now. Go! 🏁
+
+Once you have your tests implemented, your `npm run cover` output should look
+like this:
+
+
+>   ✔ containers › CustomerList › empty test
+>   ✔ store › Customers › customers should start with empty
+>   ✔ store › Customers › setting customers and getting them
+>   ✔ store › Customers › subscribing to the store
+>   ✔ components › Toggle › toggle--off class applied by default
+>   ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
+>   ✔ components › Toggle › invokes the onToggle prop when clicked
+> 
+>   7 tests passed
+> 
+> ---------------|----------|----------|----------|----------|----------------|
+> File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+> ---------------|----------|----------|----------|----------|----------------|
+>  components/   |      100 |      100 |      100 |      100 |                |
+>   Toggle.js    |      100 |      100 |      100 |      100 |                |
+>  store/        |      100 |      100 |      100 |      100 |                |
+>   Customers.js |      100 |      100 |      100 |      100 |                |
+> ---------------|----------|----------|----------|----------|----------------|
+> All files      |      100 |      100 |      100 |      100 |                |
+> ---------------|----------|----------|----------|----------|----------------|
+
+🔥🔥🔥 awesome!
+
 
