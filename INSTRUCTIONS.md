@@ -101,7 +101,7 @@ to the `scripts` object in your `package.json`.
 
 - `--quiet` -> to reduce the output in our terminal from `nodemon`
 - `--watch app` -> respond to changes in the `app/` directory
-- `--exect` -> run the following command when a relevant file has changed
+- `--exec` -> run the following command when a relevant file has changed
 - `-s` -> to reduce the output in our terminal from `npm`
 
 🐯 Now if you run `npm run watch:test`, you should see the same output as before, but
