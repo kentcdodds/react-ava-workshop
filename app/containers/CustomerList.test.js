@@ -15,7 +15,7 @@ test('Renders no customers and add button', t => {
 
 test('Renders customers and add button', t => {
   const store = {
-    getCustomers: sinon.spy(() => [{name: 'Bob'}, {name: 'Joanna'}])
+    getCustomers: sinon.spy(() => [{name: 'Bob'}, {name: 'Joanna'}]),
   }
   const output = renderStatic({store})
   t.true(output.includes('list of customers'))
@@ -46,7 +46,8 @@ test('unsubscribes when unmounted', t => {
 
 /**
  * Create a stub for the store which can be used for assertions
- * @returns {Object} - ref property has customers and will haf ref.callback when store.callback is invoked. store.getCustomers will return ref.customers
+ * @returns {Object} - ref property has customers and will haf ref.callback when
+ *   store.callback is invoked. store.getCustomers will return ref.customers
  */
 function getStoreStub() {
   const unsubscribe = sinon.spy()
@@ -56,7 +57,7 @@ function getStoreStub() {
     subscribe: cb => {
       ref.callback = cb
       return ref.unsubscribe
-    }
+    },
   }
   return {ref, store}
 }
@@ -103,4 +104,3 @@ function CustomerListWithDefaults(props) {
     />
   )
 }
-

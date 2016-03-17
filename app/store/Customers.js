@@ -9,6 +9,7 @@ export default {
 
 /**
  * Returns the current list of customers
+ * @return {Array} customers
  */
 function getCustomers() {
   return _customers

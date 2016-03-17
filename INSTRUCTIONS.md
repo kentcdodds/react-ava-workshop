@@ -26,21 +26,13 @@ a few more dependencies:
 
 ## AVA
 
-Let's get this installed and going first. Until recently, AVA used our own babel
-configuration found in our `.babelrc` for transpiling the test files. However,
-that was changed in [this pr](https://github.com/sindresorhus/ava/pull/398) and
-now it no longer does this and instead has its own babel configuration.
-
-Unfortunately, this means that we can't utilize `jsx` in our code test files!
-A solution for has [been discussed](https://github.com/sindresorhus/ava/issues/448)
-and will (hopefully) be implemented soon. However, in the mean time. You'll have
-to install an old version of `ava` if you want to use `jsx` in your test files.
-
-🐯 To install the `ava` module, go ahead with:
+🐯 Let's get this installed and going first:
 
 ```
-npm install --save-dev ava@0.9.2
+npm install --save-dev ava
 ```
+
+> At the time of this writing, the latest version of AVA is 0.13.0
 
 This will install it and add it to your `package.json` `devDependencies`.
 
@@ -49,11 +41,12 @@ Now we can add a `test` script which will utilize AVA to run the tests in our
 `scripts` object in your `package.json`.
 
 ```javascript
-"test": "ava 'app/**/*.test.js' --verbose"
+"test": "ava \"app/**/*.test.js\" --verbose"
 ```
 
-- `'app/**/*.test.js'` - a [glob](http://npm.im/glob) which matches our tests
-- `--verbose` to get more information and preserve our `console.log`s
+- `\"app/**/*.test.js\"` - a [glob](http://npm.im/glob) which matches our tests.
+- `--verbose` to get more information so you can more easily compare the output you see with these instructions.
+  I personally prefer to not use `--verbose` normally.
 
 🐯 Now go ahead and run `npm run test`
 
@@ -69,50 +62,32 @@ You should get output that looks like this:
   3 tests passed
 ```
 
-Great! Let's move on to our next dependency.
+Great! Before we move onto the next dependency, let's add another script. AVA has an incredibly intelligent `watch`
+mode. You may be familiar with this concept from other testing frameworks. The basic idea is that it can be handy to
+have your tests re-run whenever you change your source or test files. Most frameworks will re-run all tests when you
+save changes, but AVA's watch mode is capable of identifying the effected test files and only re-running tests in those
+files. It's truly amazing.
 
-## nodemon
-
-AVA [just landed](https://github.com/sindresorhus/ava/issues/70) support for a
-`watch` mode (similar to what `mocha` already has). However, because we're using
-an older version of AVA for the time being, we'll have to implement it ourselves
-to get the really nice `watch` functionality that's useful when doing
-Test-Driven-Development. **NOTE** check
-[this issue](https://github.com/sindresorhus/ava/issues/448) issue to see if you
-can use the latest version. If you can, you can skip this entire section and just
-use the built-in `watch` functionality.
-
-The `nodemon` module will work great for what we need. 🐯 You can simply install the
-latest version (`1.8.1` at the time of this writing):
-
-```
-npm install --save-dev nodemon
-```
-
-> protip: `npm install --save-dev` `===` `npm i -D`
-
-Now, we'll add a new script which uses `nodemon` to watch the `app/` directory
-and execute our `test` script whenever files change in that directory. 🐯 Add this
-to the `scripts` object in your `package.json`.
+🐯 So let's add a script called `watch:test`. Nothing really special about the `:` in that name. It's just a convention
+I like to follow :-)
 
 ```javascript
-"watch:test": "nodemon --quiet --watch app --exec npm run test -s"
+"watch:test": "npm run test -- --watch"
 ```
 
-- `--quiet` -> to reduce the output in our terminal from `nodemon`
-- `--watch app` -> respond to changes in the `app/` directory
-- `--exec` -> run the following command when a relevant file has changed
-- `-s` -> to reduce the output in our terminal from `npm`
+> protip: This is a feature of `npm run`. It will pass any arguments after the first `--` to the script you're running
+> So you could accomplish this same thing with: `ava \"app/**/*.test.js\" --verbose --watch`, but it's nice to avoid
+> duplicating that script
 
-🐯 Now if you run `npm run watch:test`, you should see the same output as before, but
-the process wont exit. Now try to change one of the files in the `app/` directory
-(add a newline) and the tests should re-run.
+🐯 Now run `npm run watch:test`
 
-> protip: Install [`npm-quick-run`](http://npm.im/npm-quick-run) to type less :-)
->
-> protip: Install [`npm-run`](http://npm.im/npm-run) while working with local npm-installed binaries
+You should get output pretty much like before, only this time, you should notice that the process hasn't stopped. Go to
+one of the test or source files in `app/` and make a change (add a comment or a new line) and safe the file. You should
+see AVA re-run only the tests effected by that change. Totally awesome right?!
 
 🐯 Now stop the process with <kbd>CTL</kbd>+<kbd>c</kbd>
+
+Alrighty, I think we're ready to move onto the next step!
 
 ## nyc
 
@@ -126,17 +101,36 @@ and install the latest version (`5.6.0` at the time of this writing):
 npm install --save-dev nyc
 ```
 
+> the latest version of nyc at the time of this writing is `6.1.1`
+
 🐯 Now let's add a script in the `scripts` of our `package.json` to record code
 coverage:
 
 ```javascript
-"cover": "nyc --reporter=lcov --reporter=text --reporter=html npm run test"
+"cover": "nyc npm run test"
 ```
 
-- `--reporter=lcov` - Commonly used format for code coverage tracking tools
-- `--reporter=text` - To get the coverage output in our terminal
-- `--reporter=html` - To get output as a static HTML page viewing with our browser
 - `npm run test` - The script to execute to run the tests we want to cover
+
+We also need to configure which reporters `nyc` will use. We do this by adding the property `nyc` to the root of our
+`package.json`. You can do this right next to the `scripts` property if you like.
+
+```javascript
+"nyc": {
+  "reporter": [
+    "lcov",
+    "text",
+    "html"
+  ]
+}
+```
+
+- `lcov` - Commonly used format for code coverage tracking tools
+- `text` - To get the coverage output in our terminal
+- `html` - To get output as a static HTML page viewing with our browser
+
+> protip: these can all be specified in the command as well with the --reporter flag, but I prefer to do it this way
+> so that command isn't really long :-)
 
 🐯 Let's run `npm run cover` now to see our coverage. You should see this output:
 
@@ -161,15 +155,7 @@ You'll want to make sure that you add these to your `.gitignore` file as they're
 generated files and have no place in a version control system. I've already done
 this for you. Just don't forget to do this in your own projects.
 
-🐯 While we're here, let's add a `watch` mode for coverage just for kicks:
-
-```
-"watch:cover": "nodemon --quiet --watch app --exec npm run cover -s"
-```
-
-This looks pretty much the same as our `watch:test` we did earlier.
-
-🐯 Finally, one other thing that we'll add to our scripts that's kind of handy from
+🐯 one other thing that we'll add to our scripts that's kind of handy from
 `nyc` is the ability to validate a level of code coverage percentages:
 
 ```
@@ -183,8 +169,45 @@ useful in validation scripts to ensure that the project is maintaining your goal
 of coverage percentage. In a small project like this `100%` is a reasonable goal.
 However, in your project, something more like `%70` or so may be more reasonable.
 
-> protip: You might consider adding this as an installable githook with
-> [ghooks](http://npm.im/ghooks)
+> protip: You might consider adding this as an installable githook with [ghooks](http://npm.im/ghooks)
+
+## nodemon (optional)
+
+You may find yourself working hard to improve code coverage. Unfortunately, `nyc` doesn't come with an awesome `watch`
+mode like AVA does, but it can be really nice when working on code coverage to not have to manually re-run the tests
+as you work. So we're going to install `nodemon` to automatically re-run our tests with code coverage as we work.
+
+The `nodemon` module will work great for what we need. 🐯 You can simply install the
+latest version (`1.9.1` at the time of this writing):
+
+```
+npm install --save-dev nodemon
+```
+
+> protip: `npm install --save-dev` `===` `npm i -D`
+
+Now, we'll add a new script which uses `nodemon` to watch the `app/` directory
+and execute our `cover` script whenever files change in that directory. 🐯 Add this
+to the `scripts` object in your `package.json`.
+
+```
+"watch:cover": "nodemon --quiet --watch app --exec npm run cover -s"
+```
+
+- `--quiet` -> to reduce the output in our terminal from `nodemon`
+- `--watch app` -> respond to changes in the `app/` directory
+- `--exec` -> run the following command when a relevant file has changed
+- `-s` -> to reduce the output in our terminal from `npm`
+
+🐯 Now if you run `npm run watch:cover`, you should see the same output as before, but
+the process wont exit. Now try to change one of the files in the `app/` directory
+(add a newline) and the tests should re-run.
+
+> protip: Install [`npm-quick-run`](http://npm.im/npm-quick-run) to type less :-)
+>
+> protip: Install [`npm-run`](http://npm.im/npm-run) while working with local npm-installed binaries
+
+🐯 Now stop the process with <kbd>CTL</kbd>+<kbd>c</kbd>
 
 ## babel-register
 
@@ -207,38 +230,38 @@ test('empty test', t => t.pass())
 SyntaxError: Block-scoped declarations (let, const, function, class) not yet supported outside strict mode
 ```
 
-We have to transpile on the fly by ourselves. Having this control over what
-happens to our source code is actually quite nice (even if it means a bit more
-work for us).
+We have to transpile on the fly by ourselves. Having this control over what happens to our source code is actually quite
+nice (even if it means a bit more work for us).
 
-So we need to transpile this code on the fly using `babel-register`, 🐯 so let's go
-ahead and install the latest version (`6.5.1` at the time of this writing) of
-that now:
+So we need to transpile this code on the fly using `babel-register`, 🐯 so let's go ahead and install the latest
+version (`6.5.1` at the time of this writing) of that now:
 
 ```
 npm install --save-dev babel-register
 ```
 
-With that, we now need to require that file in every one of our test files that
-require code we want to transpile. Just kidding! That would be incredibly lame!
-AVA has a flag (`--require`) that we can use to basically do this for us. However,
-instead of just using `--require babel-register`, we're going to add a new file
-to do this for us because we're going to add more environment setup code in there
-soon.
+With that, we now need to require that file in every one of our test files that require code we want to transpile. Just
+kidding! That would be incredibly lame! AVA has a flag (`--require`) that we can use to basically do this for us.
+However, instead of just using `--require babel-register`, we're going to add a new file to do this for us because
+we're going to add more environment setup code in there soon.
 
-🐯 So create a new file in the `other/` directory called `setup-ava-tests.js` and
-place this in there:
+🐯 So create a new directory called `test/` and put a new file called `setup-ava-tests.js`.
+Then and place this in there:
 
 ```javascript
 require('babel-register')
 require('babel-polyfill') // this has already been installed. May as well :-)
 ```
 
-🐯 Now, update the `test` script in the `scripts` object of your `package.json` to
-use the `--require` flag like so:
+🐯 Now, we're going to configure `AVA` similar to how we configured `nyc`. We'll add a property called `ava` to the root
+of our `package.json` like so:
 
 ```javascript
-"test": "ava 'app/**/*.test.js' --verbose --require ./other/setup-ava-tests.js"
+"ava": {
+  "require": [
+    "./test/setup-ava-tests.js"
+  ]
+}
 ```
 
 🐯 Now if you run the `npm run test` you should get this again:
@@ -277,8 +300,7 @@ many methods available for ignoring code with `istanbul`
 ([learn more](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md)),
 or we can configure `nyc` to exclude specific `glob`s. We'll do the later.
 
-`nyc` configuration happens in the `package.json` file. 🐯 Add an `nyc` property to
-the root of your `package.json` object:
+Let's go back to the `nyc` configuration in the `package.json` file. 🐯 Add `exclude` to the `nyc` object
 
 ```javascript
 "nyc": {
@@ -325,21 +347,22 @@ import test from 'ava'
 import sinon from 'sinon' // you'll need to install this with `npm install --save-dev sinon`
 import store from './Customers'
 
-test('customers should start with empty', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('customers should start with empty', t => {
   // call store.getCustomers and verify the result is empty
-  t.fail() // remove this
 })
 
-test('setting customers and getting them', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('setting customers and getting them', t => {
   // create two or more objects with a string property called `name`
   // call store.setCustomers with an array of these objects
   // call store.getCustomers
   // validate that what is returned has the proper length
   // validate that the contents are the same as the contents of the array you passed
-  t.fail() // remove this
 })
 
-test('subscribing to the store', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('subscribing to the store', t => {
   // create a function spy with `sinon.spy()`
   // use that spy to subscribe to the store and assign the unsubscribe function
   // call store.setCustomers
@@ -347,7 +370,6 @@ test('subscribing to the store', t => {
   // reset the spy with `spy.reset()`
   // then call the unsubscribe function
   // validate that calling store.setCustomers again will not call the spy
-  t.fail() // remove this
 })
 
 // add an afterEach here to reset the customers to an empty array
@@ -418,16 +440,16 @@ import {renderToStaticMarkup} from 'react-dom/server'
 
 import Toggle from './Toggle'
 
-test('toggle--off class applied by default', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('toggle--off class applied by default', t => {
   // render <Toggle /> with renderToStaticMarkup and get the output
   // assert the the output string includes the text for the classname
-  t.fail() // remove this
 })
 
-test('toggle--on class applied when initialToggledOn specified to true', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('toggle--on class applied when initialToggledOn specified to true', t => {
   // render <Toggle /> with renderToStaticMarkup and get the output
   // assert the the output string includes the text for the classname
-  t.fail() // remove this
 })
 ```
 
@@ -473,7 +495,8 @@ With that installed, 🐯 go ahead and add this test to your `Toggle.test.js` fi
 (but don't implement it yet):
 
 ```javascript
-test('invokes the onToggle prop when clicked', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('invokes the onToggle prop when clicked', t => {
   // create a spy to pass in as the onToggle prop (you'll need to import sinon)
   // use document.createElement to create a div
   // render <Toggle /> with your onToggle prop into the div using `render` from `react-dom`
@@ -482,7 +505,6 @@ test('invokes the onToggle prop when clicked', t => {
   // validate the div's `innerHTML` includes the right class
   // validate your onToggle spy was called (only once)
   // validate your onToggle spy was called with the right state (true/false)
-  t.fail() // remove this
 })
 ```
 
@@ -591,13 +613,14 @@ import {render, unmountComponentAtNode} from 'react-dom'
 
 import CustomerList from './CustomerList'
 
-test('Renders no customers and add button', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('Renders no customers and add button', t => {
   // normal props test. Use renderToStaticMarkup and test the output when you pass no props
   // verify that it includes 'no customers' and doesn't include 'list of customers'
-  t.fail() // remove this
 })
 
-test('Renders customers and add button', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('Renders customers and add button', t => {
   // Here's where we need to provide our stubbed store
   // create an object that has a getCustomers function
   // which is a spy that wraps a function that returns
@@ -606,10 +629,10 @@ test('Renders customers and add button', t => {
   // then assert that the output includes 'list of customers'
   // assert your output includes the names of each of your customers
   // assert that your output doesn't include 'no customers'
-  t.fail() // remove this
 })
 
-test('Responds to store updates', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('Responds to store updates', t => {
   // this is where we're actually testing the callback to the subscription
   // the other two tests were pretty much just testing Props
   // this test covers the Data input
@@ -626,17 +649,16 @@ test('Responds to store updates', t => {
   // it includes 'list of customers'
   // it includes the names of each of your customers
   // it does not include 'no customers'
-  t.fail() // remove this
 })
 
-test('unsubscribes when unmounted', t => {
+// change this from `test.todo(` to simply `test(`
+test.todo('unsubscribes when unmounted', t => {
   // do many of the same things as above by stubbing the store
   // this one needs to create a spy that will be returned by the stubbed subscribe method
   // You don't need to worry about changing customers or invoking the callback
   // still render it into a div
   // But then you can immediately unmount it by calling unmountComponentAtNode (from 'react-dom')
   // then assert that your unsubscribe spy was called
-  t.fail() // remove this
 })
 ```
 
@@ -655,7 +677,6 @@ Once you've got everything passing, your output should look like this:
   ✔ store › Customers › customers should start with empty
   ✔ store › Customers › setting customers and getting them
   ✔ store › Customers › subscribing to the store
-Warning: Each child in an array or iterator should have a unique "key" prop. Check the render method of `ListOfCustomers`. See https://fb.me/react-warning-keys for more information.
   ✔ components › Toggle › toggle--off class applied by default
   ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
   ✔ components › Toggle › invokes the onToggle prop when clicked
