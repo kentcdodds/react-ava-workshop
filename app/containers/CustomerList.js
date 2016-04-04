@@ -5,18 +5,17 @@ class CustomerList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      customers: store.getCustomers(),
+      customers: props.store.getCustomers(),
     }
   }
   componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState({
-        customers: store.getCustomers()
-      })
-    })
+    this.unsubscribe = this.props.store.subscribe(() => this.updateStateWithCustomers())
   }
   componentWillUnmount() {
     this.unsubscribe()
+  }
+  updateStateWithCustomers() {
+    this.setState({customers: this.props.store.getCustomers()})
   }
   render() {
     const {customers} = this.state
@@ -28,15 +27,30 @@ class CustomerList extends React.Component {
   }
 }
 
+CustomerList.defaultProps = {
+  store,
+}
+
+CustomerList.propTypes = {
+  store: PropTypes.shape({
+    getCustomers: PropTypes.func,
+    subscribe: PropTypes.func,
+  }).isRequired,
+}
+
 function ListOfCustomers({customers}) {
   return (
     <div>
       Here is your list of customers!
       <ul>
-        {customers.map(c => <Customer {...c} />)}
+        {customers.map((c, i) => <Customer key={i} {...c} />)}
       </ul>
     </div>
   )
+}
+
+ListOfCustomers.propTypes = {
+  customers: PropTypes.array,
 }
 
 function NoCustomers() {
@@ -51,5 +65,8 @@ function Customer({name}) {
   return <li key={name}>{name}</li>
 }
 
-export default CustomerList
+Customer.propTypes = {
+  name: PropTypes.string,
+}
 
+export default CustomerList
