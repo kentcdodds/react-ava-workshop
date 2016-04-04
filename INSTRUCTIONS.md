@@ -55,11 +55,19 @@ Now we can add a `test` script which will utilize AVA to run the tests in our
 You should get output that looks like this:
 
 ```
-  ✔ components › Toggle › empty test
-  ✔ store › Customers › empty test
-  ✔ containers › CustomerList › empty test
+- components › Toggle › toggle--off class applied by default
+- components › Toggle › toggle--on class applied when initialToggledOn specified to true
+- components › Toggle › invokes the onToggle prop when clicked
+- store › Customers › customers should start with empty
+- store › Customers › setting customers and getting them
+- store › Customers › subscribing to the store
+- containers › CustomerList › Renders no customers and add button
+- containers › CustomerList › Renders customers and add button
+- containers › CustomerList › Responds to store updates
+- containers › CustomerList › unsubscribes when unmounted
 
-  3 tests passed
+0 tests passed
+10 tests todo
 ```
 
 Great! Before we move onto the next dependency, let's add another script. AVA has an incredibly intelligent `watch`
@@ -112,7 +120,7 @@ coverage:
 
 - `npm run test` - The script to execute to run the tests we want to cover
 
-We also need to configure which reporters `nyc` will use. We do this by adding the property `nyc` to the root of our
+🐯 We also need to configure which reporters `nyc` will use. We do this by adding the property `nyc` to the root of our
 `package.json`. You can do this right next to the `scripts` property if you like.
 
 ```javascript
@@ -135,6 +143,20 @@ We also need to configure which reporters `nyc` will use. We do this by adding t
 🐯 Let's run `npm run cover` now to see our coverage. You should see this output:
 
 ```
+  - components › Toggle › toggle--off class applied by default
+  - components › Toggle › toggle--on class applied when initialToggledOn specified to true
+  - components › Toggle › invokes the onToggle prop when clicked
+  - containers › CustomerList › Renders no customers and add button
+  - containers › CustomerList › Renders customers and add button
+  - containers › CustomerList › Responds to store updates
+  - containers › CustomerList › unsubscribes when unmounted
+  - store › Customers › customers should start with empty
+  - store › Customers › setting customers and getting them
+  - store › Customers › subscribing to the store
+
+  0 tests passed
+  10 tests todo
+
 ----------|----------|----------|----------|----------|----------------|
 File      |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
 ----------|----------|----------|----------|----------|----------------|
@@ -168,6 +190,15 @@ report indicates a percentage of less than `100%` for that category. This can be
 useful in validation scripts to ensure that the project is maintaining your goal
 of coverage percentage. In a small project like this `100%` is a reasonable goal.
 However, in your project, something more like `%70` or so may be more reasonable.
+
+If you run `npm run check-coverage` right now, you'll get the following error:
+
+```
+ERROR: No coverage files found.
+```
+
+This is because right now we're not actually instrumenting any code for coverage yet. Hold your horses!
+🏇 we'll get to it!
 
 > protip: You might consider adding this as an installable githook with [ghooks](http://npm.im/ghooks)
 
@@ -214,15 +245,8 @@ the process wont exit. Now try to change one of the files in the `app/` director
 So far, we haven't actually tested anything. All of our tests are totally empty.
 One thing that we're about to discover as we start importing our modules into our
 tests is that AVA wont transpile them with `babel` for us. Let's see what I mean.
-🐯 Go ahead and open the `Customers.test.js` file in the `app/store/` directory and
-put this in it:
-
-```javascript
-import test from 'ava'
-import store from './Customers'
-
-test('empty test', t => t.pass())
-```
+🐯 Go ahead and open the `Customers.test.js` file in the `app/store/` directory and uncomment the line that says:
+`import store from './Customers'`.
 
 🐯 Now try to run `npm run test` and you'll get output with this error message:
 
@@ -267,11 +291,19 @@ of our `package.json` like so:
 🐯 Now if you run the `npm run test` you should get this again:
 
 ```
-  ✔ containers › CustomerList › empty test
-  ✔ components › Toggle › empty test
-  ✔ store › Customers › empty test
+- containers › CustomerList › Renders no customers and add button
+- containers › CustomerList › Renders customers and add button
+- containers › CustomerList › Responds to store updates
+- containers › CustomerList › unsubscribes when unmounted
+- components › Toggle › toggle--off class applied by default
+- components › Toggle › toggle--on class applied when initialToggledOn specified to true
+- components › Toggle › invokes the onToggle prop when clicked
+- store › Customers › customers should start with empty
+- store › Customers › setting customers and getting them
+- store › Customers › subscribing to the store
 
-  3 tests passed
+0 tests passed
+10 tests todo
 ```
 
 Awesome! 🎉 Unfortunately, there's one more thing we need to consider before we're
@@ -282,8 +314,8 @@ all set. 🐯 Try to run `npm run cover`. You'll get this output:
 File                 |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
 ---------------------|----------|----------|----------|----------|----------------|
  app/store/          |    46.15 |      100 |        0 |    46.15 |                |
-  Customers.js       |    46.15 |      100 |        0 |    46.15 |... 20,21,22,27 |
- other/              |      100 |      100 |      100 |      100 |                |
+  Customers.js       |    46.15 |      100 |        0 |    46.15 |... 34,35,36,44 |
+ test/               |      100 |      100 |      100 |      100 |                |
   setup-ava-tests.js |      100 |      100 |      100 |      100 |                |
 ---------------------|----------|----------|----------|----------|----------------|
 All files            |    53.33 |      100 |        0 |    53.33 |                |
@@ -305,21 +337,21 @@ Let's go back to the `nyc` configuration in the `package.json` file. 🐯 Add `e
 ```javascript
 "nyc": {
   "exclude": [
-    "other"
+    "test"
   ]
 }
 ```
 
 - `exclude` - an array of globs that should be excluded from coverage instrumentation
 
-🐯 Now run `npm run cover` again and you'll see that the report excludes `other/`
+🐯 Now run `npm run cover` again and you'll see that the report excludes `test/`
 
 ```
 ---------------|----------|----------|----------|----------|----------------|
 File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
 ---------------|----------|----------|----------|----------|----------------|
  store/        |    46.15 |      100 |        0 |    46.15 |                |
-  Customers.js |    46.15 |      100 |        0 |    46.15 |... 20,21,22,27 |
+  Customers.js |    46.15 |      100 |        0 |    46.15 |... 34,35,36,44 |
 ---------------|----------|----------|----------|----------|----------------|
 All files      |    46.15 |      100 |        0 |    46.15 |                |
 ---------------|----------|----------|----------|----------|----------------|
@@ -339,58 +371,28 @@ There are three APIs exposed from `Customer.js` that we'll be wanting to test:
 - `setCustomers`
 - `subscribe`
 
-Each is documented using JSDoc. 🐯 Go ahead and copy this into the `Customer.test.js`
-file and follow the instructions in the comments:
-
-```javascript
-import test from 'ava'
-import sinon from 'sinon' // you'll need to install this with `npm install --save-dev sinon`
-import store from './Customers'
-
-// change this from `test.todo(` to simply `test(`
-test.todo('customers should start with empty', t => {
-  // call store.getCustomers and verify the result is empty
-})
-
-// change this from `test.todo(` to simply `test(`
-test.todo('setting customers and getting them', t => {
-  // create two or more objects with a string property called `name`
-  // call store.setCustomers with an array of these objects
-  // call store.getCustomers
-  // validate that what is returned has the proper length
-  // validate that the contents are the same as the contents of the array you passed
-})
-
-// change this from `test.todo(` to simply `test(`
-test.todo('subscribing to the store', t => {
-  // create a function spy with `sinon.spy()`
-  // use that spy to subscribe to the store and assign the unsubscribe function
-  // call store.setCustomers
-  // validate that the spy was called once
-  // reset the spy with `spy.reset()`
-  // then call the unsubscribe function
-  // validate that calling store.setCustomers again will not call the spy
-})
-
-// add an afterEach here to reset the customers to an empty array
-```
-
-🐯 With that copied into the file, I recommend you run: `npm run watch:cover` to have
-the tests run while you're updating the file. Now go ahead and implement! You
-want to look at the comment by the [`sinon`](http://npm.im/sinon) import and the
-comment at the bottom about adding an `afterEach`. Look up how to do that
+Each is documented using JSDoc. 🐯 Go ahead and open the `Customer.test.js` file and follow the instructions in the
+comments. I recommend you run `npm run watch:cover` to have the tests run while you're updating the file. Now go ahead
+and implement! You want to look at the comment by the [`sinon`](http://npm.im/sinon) import and the comment at the
+bottom about adding an `afterEach`. Look up how to do that
 [here](https://www.npmjs.com/package/ava#before--after-hooks).
 
 Once you're all done, your output should look like this:
 
 ```
-  ✔ components › Toggle › empty test
-  ✔ containers › CustomerList › empty test
+  - containers › CustomerList › Renders no customers and add button
+  - containers › CustomerList › Renders customers and add button
+  - components › Toggle › toggle--off class applied by default
+  - components › Toggle › toggle--on class applied when initialToggledOn specified to true
+  - components › Toggle › invokes the onToggle prop when clicked
+  - containers › CustomerList › Responds to store updates
+  - containers › CustomerList › unsubscribes when unmounted
   ✔ store › Customers › customers should start with empty
   ✔ store › Customers › setting customers and getting them
   ✔ store › Customers › subscribing to the store
 
-  5 tests passed
+  3 tests passed
+  7 tests todo
 
 ---------------|----------|----------|----------|----------|----------------|
 File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
@@ -406,9 +408,8 @@ All files      |      100 |      100 |      100 |      100 |                |
 
 ## Test Toggle.js
 
-Alright! Now we can finally get to testing some React code! As
-[my slides](http://kcd.im/react-ava#/2/2) illustrate, React components have three
-inputs that need to be considered when writing tests:
+Alright! Now we can finally get to testing some React code! As [my slides](http://kcd.im/react-ava#/2/2) illustrate,
+React components have three inputs that need to be considered when writing tests:
 
 1. Props
 2. User
@@ -429,83 +430,66 @@ and render it into its pure HTML form. We'll then make assertions that the outpu
 contains the pieces that we're looking for. This approach definitely comes with
 trade-offs, but its pros outweigh its cons.
 
-🐯 Go ahead and open `Toggle.test.js` in `app/components/` and paste this in:
+Before we start writing React tests with AVA, we have one final thing to configure for AVA. Something that's a bit of a
+gotcha is AVA actually uses its own configuration for transpiling your tests that's separate from your configuration for
+transpiling your source. This can be a bit confusing at first. What we're going to do is tell AVA to transpile our tests
+the same way it transpiles our source. This is configured in our `package.json` in the `ava` property we added earlier.
 
-```javascript
-import test from 'ava'
-import sinon from 'sinon' // you should have installed this in the last step
-
-import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server'
-
-import Toggle from './Toggle'
-
-// change this from `test.todo(` to simply `test(`
-test.todo('toggle--off class applied by default', t => {
-  // render <Toggle /> with renderToStaticMarkup and get the output
-  // assert the the output string includes the text for the classname
-})
-
-// change this from `test.todo(` to simply `test(`
-test.todo('toggle--on class applied when initialToggledOn specified to true', t => {
-  // render <Toggle /> with renderToStaticMarkup and get the output
-  // assert the the output string includes the text for the classname
-})
-```
-
-Simple enough right? Once you have this working, your `npm run cover` output
-should look like:
+🐯 Update the `ava` property to look like this:
 
 ```
-  ✔ containers › CustomerList › empty test
+"ava": {
+  "babel": "inherit",
+  "require": [
+    "./test/setup-ava-tests.js"
+  ]
+}
+```
+
+We're effectively telling AVA to use the same configuration that our app uses. Which is using the `.babelrc` file.
+
+🐯 Go ahead and open `Toggle.test.js` in `app/components/` and check out the comments.
+
+Once you get the first two tests working, your `npm run cover` output should look like this:
+
+```
+  - containers › CustomerList › Renders no customers and add button
+  - containers › CustomerList › Renders customers and add button
+  - containers › CustomerList › Responds to store updates
+  - containers › CustomerList › unsubscribes when unmounted
   ✔ store › Customers › customers should start with empty
   ✔ store › Customers › setting customers and getting them
   ✔ store › Customers › subscribing to the store
   ✔ components › Toggle › toggle--off class applied by default
   ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
+  - components › Toggle › invokes the onToggle prop when clicked
 
-  6 tests passed
+  5 tests passed
+  5 tests todo
+
 
 ---------------|----------|----------|----------|----------|----------------|
 File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
 ---------------|----------|----------|----------|----------|----------------|
- components/   |    66.67 |      100 |    66.67 |    66.67 |                |
-  Toggle.js    |    66.67 |      100 |    66.67 |    66.67 |       11,12,13 |
+ components/   |       70 |      100 |    66.67 |       70 |                |
+  Toggle.js    |       70 |      100 |    66.67 |       70 |       11,12,13 |
  store/        |      100 |      100 |      100 |      100 |                |
   Customers.js |      100 |      100 |      100 |      100 |                |
 ---------------|----------|----------|----------|----------|----------------|
-All files      |    86.36 |      100 |    88.89 |    86.36 |                |
+All files      |    86.96 |      100 |    88.89 |    86.96 |                |
 ---------------|----------|----------|----------|----------|----------------|
 ```
 
-We're missing coverage on the `handleToggleClick` lines. So far, we've only tested
-changing the `Props` input to our component. Now we need to simulate the `User`
-input.
+We're missing coverage on the `handleToggleClick` lines. That's what that thrid test is for. So far, we've only tested
+changing the `Props` input to our component. Now we need to simulate the `User` input.
 
 To do this, we'll leverage React's Synthetic Event system by using the official
 [test utils](https://facebook.github.io/react/docs/test-utils.html):
 `react-addons-test-utils`. 🐯 Go ahead and install the latest version of this now
-(`0.14.7` is the latest at the time of this writing):
+(`0.14.8` is the latest at the time of this writing):
 
 ```
 npm install --save-dev react-addons-test-utils
-```
-
-With that installed, 🐯 go ahead and add this test to your `Toggle.test.js` file
-(but don't implement it yet):
-
-```javascript
-// change this from `test.todo(` to simply `test(`
-test.todo('invokes the onToggle prop when clicked', t => {
-  // create a spy to pass in as the onToggle prop (you'll need to import sinon)
-  // use document.createElement to create a div
-  // render <Toggle /> with your onToggle prop into the div using `render` from `react-dom`
-  // get a reference to the button using `div.querySelector`
-  // Use `Simulate.click` from `react-addons-test-utils` to simulate a click event on the `button`
-  // validate the div's `innerHTML` includes the right class
-  // validate your onToggle spy was called (only once)
-  // validate your onToggle spy was called with the right state (true/false)
-})
 ```
 
 You'll notice that the instructions require the use of `document.createElement`
@@ -516,7 +500,7 @@ someone seemed to have success
 [getting AVA to work with karma](https://github.com/angular/angular.js/issues/13971)).
 Luckily we have [jsdom](http://npm.im/jsdom) which works great for our use-case.
 It just takes installing and getting set up for each of our tests. 🐯 Let's install
-the latest version (`8.0.2` at the time of this writing).
+the latest version (`8.3.0` at the time of this writing).
 
 ```
 npm install --save-dev jsdom
@@ -541,7 +525,7 @@ global.window = document.defaultView
 global.navigator = window.navigator
 ```
 
-Now, because we've configured AVA to `--require` this file, next time our tests
+Now, because we've configured AVA to `require` this file, next time our tests
 run, they'll have this environment set up for them and have access to the global
 `document` for creating elements. Which is what you need to do now. Go! 🏁
 
@@ -550,15 +534,19 @@ like this:
 
 
 ```
-  ✔ containers › CustomerList › empty test
+  - containers › CustomerList › Renders no customers and add button
+  - containers › CustomerList › Renders customers and add button
+  - containers › CustomerList › Responds to store updates
+  - containers › CustomerList › unsubscribes when unmounted
   ✔ store › Customers › customers should start with empty
   ✔ store › Customers › setting customers and getting them
-  ✔ store › Customers › subscribing to the store
   ✔ components › Toggle › toggle--off class applied by default
   ✔ components › Toggle › toggle--on class applied when initialToggledOn specified to true
+  ✔ store › Customers › subscribing to the store
   ✔ components › Toggle › invokes the onToggle prop when clicked
 
-  7 tests passed
+  6 tests passed
+  4 tests todo
 
 ---------------|----------|----------|----------|----------|----------------|
 File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
@@ -601,66 +589,7 @@ If you look at the currently implementation of `CustomerList` in the
 🐯 Your task is to update `CustomerList.js` component to use `defaultProps` instead
 and reference the store via `props.store`.
 
-🐯 Once you've finished that, paste this into the `CustomerList.test.js` file:
-
-```javascript
-import test from 'ava'
-import sinon from 'sinon'
-
-import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server'
-import {render, unmountComponentAtNode} from 'react-dom'
-
-import CustomerList from './CustomerList'
-
-// change this from `test.todo(` to simply `test(`
-test.todo('Renders no customers and add button', t => {
-  // normal props test. Use renderToStaticMarkup and test the output when you pass no props
-  // verify that it includes 'no customers' and doesn't include 'list of customers'
-})
-
-// change this from `test.todo(` to simply `test(`
-test.todo('Renders customers and add button', t => {
-  // Here's where we need to provide our stubbed store
-  // create an object that has a getCustomers function
-  // which is a spy that wraps a function that returns
-  // an array of at least 2 customers (objects with a name string property)
-  // then use renderToStaticMarkup to get the output
-  // then assert that the output includes 'list of customers'
-  // assert your output includes the names of each of your customers
-  // assert that your output doesn't include 'no customers'
-})
-
-// change this from `test.todo(` to simply `test(`
-test.todo('Responds to store updates', t => {
-  // this is where we're actually testing the callback to the subscription
-  // the other two tests were pretty much just testing Props
-  // this test covers the Data input
-
-  // declare an uninitialized callback variable
-  // declare a customers variable assigned to an empty array []
-  // create a store with a getCustomers that's a function which returns customers
-  // also add a subscribe function that accepts a cb that simply assigns your callback variable to the given cb
-  // Create a div with document.createElement (as before)
-  // render the CustomerList with your store stub prop into the div
-  // reassign the customers to an array of at least two new customers (objects with a name property)
-  // invoke the callback (which should be assigned by now)
-  // get the innerHTML of the div and assert:
-  // it includes 'list of customers'
-  // it includes the names of each of your customers
-  // it does not include 'no customers'
-})
-
-// change this from `test.todo(` to simply `test(`
-test.todo('unsubscribes when unmounted', t => {
-  // do many of the same things as above by stubbing the store
-  // this one needs to create a spy that will be returned by the stubbed subscribe method
-  // You don't need to worry about changing customers or invoking the callback
-  // still render it into a div
-  // But then you can immediately unmount it by calling unmountComponentAtNode (from 'react-dom')
-  // then assert that your unsubscribe spy was called
-})
-```
+🐯 Once you've finished that, open the `CustomerList.test.js` file.
 
 You'll notice that in the last test, you have to use `document.createElement`.
 Good thing we already set up the DOM in our `setup-ava-tests.js` so we can do
