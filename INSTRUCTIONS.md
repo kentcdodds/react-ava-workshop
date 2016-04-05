@@ -165,8 +165,12 @@ All files |      100 |      100 |      100 |      100 |                |
 ----------|----------|----------|----------|----------|----------------|
 ```
 
-This is great! Just kidding. We aren't importing any files to actually record code
-coverage on yet, so we have 100% of nothing covered. We'll get there!
+This is great! Just kidding. We aren't importing any files to actually record code coverage on yet, so we have 100% of
+nothing covered. We'll get there! But one problem this presents is until we go through our entire application and test
+everything, we have a very poor understanding of our actual coverage over our entire application. This is outside of the
+scope of this workshop, but if this is important to you, basically you need to have a single test file who's job it is
+to require all the files in your application that you want to cover. You can do this with some magic from `path` and
+[`glob`](http://npm.im/glob).
 
 You'll also notice that running this command added two directories to our repo:
 
