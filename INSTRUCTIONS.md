@@ -306,45 +306,8 @@ of our `package.json` like so:
 10 tests todo
 ```
 
-Awesome! 🎉 Unfortunately, there's one more thing we need to consider before we're
-all set. 🐯 Try to run `npm run cover`. You'll get this output:
+Awesome! 🎉 Now, just to be sure, run `npm run cover` and you should get output like this:
 
-```
----------------------|----------|----------|----------|----------|----------------|
-File                 |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
----------------------|----------|----------|----------|----------|----------------|
- app/store/          |    46.15 |      100 |        0 |    46.15 |                |
-  Customers.js       |    46.15 |      100 |        0 |    46.15 |... 34,35,36,44 |
- test/               |      100 |      100 |      100 |      100 |                |
-  setup-ava-tests.js |      100 |      100 |      100 |      100 |                |
----------------------|----------|----------|----------|----------|----------------|
-All files            |    53.33 |      100 |        0 |    53.33 |                |
----------------------|----------|----------|----------|----------|----------------|
-```
-
-I'm not talking about the low coverage on the `Customers.js` file. We'll deal with
-that later. I'm talking about the coverage being recorded on our `setup-ava-tests`
-file. It's skewing our results, so we need to tell `nyc` to exclude it from the
-results.
-
-There are two ways we can exclude code from coverage. We can either utilize the
-many methods available for ignoring code with `istanbul`
-([learn more](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md)),
-or we can configure `nyc` to exclude specific `glob`s. We'll do the later.
-
-Let's go back to the `nyc` configuration in the `package.json` file. 🐯 Add `exclude` to the `nyc` object
-
-```javascript
-"nyc": {
-  "exclude": [
-    "test"
-  ]
-}
-```
-
-- `exclude` - an array of globs that should be excluded from coverage instrumentation
-
-🐯 Now run `npm run cover` again and you'll see that the report excludes `test/`
 
 ```
 ---------------|----------|----------|----------|----------|----------------|
@@ -357,7 +320,7 @@ All files      |    46.15 |      100 |        0 |    46.15 |                |
 ---------------|----------|----------|----------|----------|----------------|
 ```
 
-Like I said, we'll deal with the coverage numbers later. Like... right now!!!
+Alrighty, let's deal with these abysmal coverage numbers!
 
 ## Test Customers.js
 
