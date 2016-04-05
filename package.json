@@ -5,10 +5,6 @@
   "description": "🐯 A workshop repository for testing React ⚛ with AVA 🚀",
   "main": "index.js",
   "nyc": {
-    "exclude": [
-      "other",
-      "**/*.test.js"
-    ],
     "reporter": [
       "lcov",
       "text",
