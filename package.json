@@ -5,7 +5,8 @@
   "description": "🐯 A workshop repository for testing React ⚛ with AVA 🚀",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "ava \"**/*.test.js\""
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/kentcdodds/react-ava-workshop#readme",
   "devDependencies": {
+    "ava": "0.13.0",
     "babel-core": "6.7.4",
     "babel-eslint": "6.0.2",
     "babel-polyfill": "6.7.4",
