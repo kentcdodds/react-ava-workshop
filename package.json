@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "ava \"**/*.test.js\""
+    "test": "ava \"**/*.test.js\"",
+    "watch:test": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
