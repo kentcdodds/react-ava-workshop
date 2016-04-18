@@ -67,7 +67,7 @@ You should get output that looks like this:
 - containers › CustomerList › unsubscribes when unmounted
 
 0 tests passed
-10 tests todo
+10 tests skip
 ```
 
 Great! Before we move onto the next dependency, let's add another script. AVA has an incredibly intelligent `watch`
@@ -155,7 +155,7 @@ coverage:
   - store › Customers › subscribing to the store
 
   0 tests passed
-  10 tests todo
+  10 tests skip
 
 ----------|----------|----------|----------|----------|----------------|
 File      |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
@@ -307,7 +307,7 @@ of our `package.json` like so:
 - store › Customers › subscribing to the store
 
 0 tests passed
-10 tests todo
+10 tests skip
 ```
 
 Awesome! 🎉 Now, just to be sure, run `npm run cover` and you should get output like this:
@@ -359,7 +359,7 @@ Once you're all done, your output should look like this:
   ✔ store › Customers › subscribing to the store
 
   3 tests passed
-  7 tests todo
+  7 tests skip
 
 ---------------|----------|----------|----------|----------|----------------|
 File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
@@ -432,7 +432,7 @@ Once you get the first two tests working, your `npm run cover` output should loo
   - components › Toggle › invokes the onToggle prop when clicked
 
   5 tests passed
-  5 tests todo
+  5 tests skip
 
 
 ---------------|----------|----------|----------|----------|----------------|
@@ -513,7 +513,7 @@ like this:
   ✔ components › Toggle › invokes the onToggle prop when clicked
 
   6 tests passed
-  4 tests todo
+  4 tests skip
 
 ---------------|----------|----------|----------|----------|----------------|
 File           |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |

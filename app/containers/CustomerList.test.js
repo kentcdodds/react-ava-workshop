@@ -7,14 +7,14 @@ import test from 'ava'
 
 // import CustomerList from './CustomerList'
 
-// change this from `test.todo(` to simply `test(`
-test.todo('Renders no customers and add button', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('Renders no customers and add button', t => {
   // normal props test. Use renderToStaticMarkup and test the output when you pass no props
   // verify that it includes 'no customers' and doesn't include 'list of customers'
 })
 
-// change this from `test.todo(` to simply `test(`
-test.todo('Renders customers and add button', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('Renders customers and add button', t => {
   // Here's where we need to provide our stubbed store
   // create an object that has a getCustomers function
   // which is a spy that wraps a function that returns
@@ -25,8 +25,8 @@ test.todo('Renders customers and add button', t => {
   // assert that your output doesn't include 'no customers'
 })
 
-// change this from `test.todo(` to simply `test(`
-test.todo('Responds to store updates', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('Responds to store updates', t => {
   // this is where we're actually testing the callback to the subscription
   // the other two tests were pretty much just testing Props
   // this test covers the Data input
@@ -45,8 +45,8 @@ test.todo('Responds to store updates', t => {
   // it does not include 'no customers'
 })
 
-// change this from `test.todo(` to simply `test(`
-test.todo('unsubscribes when unmounted', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('unsubscribes when unmounted', t => {
   // do many of the same things as above by stubbing the store
   // this one needs to create a spy that will be returned by the stubbed subscribe method
   // You don't need to worry about changing customers or invoking the callback

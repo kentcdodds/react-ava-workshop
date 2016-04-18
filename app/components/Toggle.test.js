@@ -6,20 +6,20 @@ import test from 'ava'
 
 // import Toggle from './Toggle'
 
-// change this from `test.todo(` to simply `test(`
-test.todo('toggle--off class applied by default', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('toggle--off class applied by default', t => {
   // render <Toggle /> with renderToStaticMarkup and get the output
   // assert the the output string includes the text for the classname
 })
 
-// change this from `test.todo(` to simply `test(`
-test.todo('toggle--on class applied when initialToggledOn specified to true', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('toggle--on class applied when initialToggledOn specified to true', t => {
   // render <Toggle /> with renderToStaticMarkup and get the output
   // assert the the output string includes the text for the classname
 })
 
-// change this from `test.todo(` to simply `test(`
-test.todo('invokes the onToggle prop when clicked', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('invokes the onToggle prop when clicked', t => {
   // create a spy to pass in as the onToggle prop (you'll need to import sinon)
   // use document.createElement to create a div
   // render <Toggle /> with your onToggle prop into the div using `render` from `react-dom`

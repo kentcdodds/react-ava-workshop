@@ -2,13 +2,13 @@ import test from 'ava'
 // import sinon from 'sinon' // you'll need to install this with `npm install --save-dev sinon`
 // import store from './Customers'
 
-// change this from `test.todo(` to simply `test(`
-test.todo('customers should start with empty', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('customers should start with empty', t => {
   // call store.getCustomers and verify the result is empty
 })
 
-// change this from `test.todo(` to simply `test(`
-test.todo('setting customers and getting them', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('setting customers and getting them', t => {
   // create two or more objects with a string property called `name`
   // call store.setCustomers with an array of these objects
   // call store.getCustomers
@@ -16,8 +16,8 @@ test.todo('setting customers and getting them', t => {
   // validate that the contents are the same as the contents of the array you passed
 })
 
-// change this from `test.todo(` to simply `test(`
-test.todo('subscribing to the store', t => {
+// change this from `test.skip(` to simply `test(`
+test.skip('subscribing to the store', t => {
   // create a function spy with `sinon.spy()`
   // use that spy to subscribe to the store and assign the unsubscribe function
   // call store.setCustomers
