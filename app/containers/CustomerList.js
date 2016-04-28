@@ -7,14 +7,14 @@ class CustomerList extends React.Component {
     this.state = {customers: [], boss: props.initialBoss || false}
   }
   componentDidMount() {
-    this.unsubscribe = store.subscribe(() => this.updateStateWithCustomers())
+    this.unsubscribe = this.props.store.subscribe(() => this.updateStateWithCustomers())
     this.updateStateWithCustomers()
   }
   componentWillUnmount() {
     this.unsubscribe()
   }
   updateStateWithCustomers() {
-    this.setState({customers: store.getCustomers()})
+    this.setState({customers: this.props.store.getCustomers()})
   }
   toggleBoss() {
     const boss = !this.state.boss
@@ -37,7 +37,13 @@ class CustomerList extends React.Component {
 CustomerList.propTypes = {
   initialBoss: PropTypes.bool.isRequired,
   onToggleBoss: PropTypes.func.isRequired,
+  store: PropTypes.shape({
+    subscribe: PropTypes.func.isRequired,
+    getCustomers: PropTypes.func.isRequired,
+  }).isRequired,
 }
+
+CustomerList.defaultProps = {store}
 
 function ListOfCustomers({customers}) {
   return (
