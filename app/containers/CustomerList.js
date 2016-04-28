@@ -5,17 +5,17 @@ class CustomerList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      customers: props.store.getCustomers(),
+      customers: store.getCustomers(),
     }
   }
   componentDidMount() {
-    this.unsubscribe = this.props.store.subscribe(() => this.updateStateWithCustomers())
+    this.unsubscribe = store.subscribe(() => this.updateStateWithCustomers())
   }
   componentWillUnmount() {
     this.unsubscribe()
   }
   updateStateWithCustomers() {
-    this.setState({customers: this.props.store.getCustomers()})
+    this.setState({customers: store.getCustomers()})
   }
   render() {
     const {customers} = this.state
@@ -27,16 +27,7 @@ class CustomerList extends React.Component {
   }
 }
 
-CustomerList.defaultProps = {
-  store,
-}
-
-CustomerList.propTypes = {
-  store: PropTypes.shape({
-    getCustomers: PropTypes.func,
-    subscribe: PropTypes.func,
-  }).isRequired,
-}
+CustomerList.propTypes = {/* add propTypes here */}
 
 function ListOfCustomers({customers}) {
   return (
