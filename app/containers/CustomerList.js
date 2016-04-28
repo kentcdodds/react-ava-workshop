@@ -18,15 +18,20 @@ class CustomerList extends React.Component {
   }
   render() {
     const {customers} = this.state
-    if (customers.length === 0) {
-      return <NoCustomers />
-    } else {
-      return <ListOfCustomers customers={customers} />
-    }
+    const {boss} = this.props
+    const noCustomers = customers.length === 0
+    return (
+      <div>
+        {noCustomers ? <NoCustomers /> : <ListOfCustomers customers={customers} />}
+        {boss ? <BossNotice /> : <SalesPersonNotice />}
+      </div>
+    )
   }
 }
 
-CustomerList.propTypes = {/* add propTypes here */}
+CustomerList.propTypes = {
+  boss: PropTypes.bool.isRequired,
+}
 
 function ListOfCustomers({customers}) {
   return (
@@ -53,6 +58,14 @@ function NoCustomers() {
 
 function Customer({name}) {
   return <li key={name}>{name}</li>
+}
+
+function SalesPersonNotice() {
+  return <div>You are a sales person 🤓</div>
+}
+
+function BossNotice() {
+  return <div>You are a boss 😎</div>
 }
 
 Customer.propTypes = {
