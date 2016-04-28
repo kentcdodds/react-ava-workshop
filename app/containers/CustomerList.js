@@ -4,12 +4,11 @@ import store from '../store/Customers'
 class CustomerList extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      customers: store.getCustomers(),
-    }
+    this.state = {customers: []}
   }
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => this.updateStateWithCustomers())
+    this.updateStateWithCustomers()
   }
   componentWillUnmount() {
     this.unsubscribe()
