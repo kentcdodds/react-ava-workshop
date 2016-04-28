@@ -273,7 +273,7 @@ kidding! That would be incredibly lame! AVA has a flag (`--require`) that we can
 However, instead of just using `--require babel-register`, we're going to add a new file to do this for us because
 we're going to add more environment setup code in there soon.
 
-🐯 So create a new directory called `test/` and put a new file called `setup-ava-tests.js`.
+🐯 So create a new directory called `test/helpers/` and put a new file called `setup-test-env.js`.
 Then and place this in there:
 
 ```javascript
@@ -287,7 +287,7 @@ of our `package.json` like so:
 ```javascript
 "ava": {
   "require": [
-    "./test/setup-ava-tests.js"
+    "./test/helpers/setup-test-env.js"
   ]
 }
 ```
@@ -408,7 +408,7 @@ the same way it transpiles our source. This is configured in our `package.json` 
 "ava": {
   "babel": "inherit",
   "require": [
-    "./test/setup-ava-tests.js"
+    "./test/helpers/setup-test-env.js"
   ]
 }
 ```
@@ -475,7 +475,7 @@ npm install --save-dev jsdom
 
 With that installed, now we need each one of our tests to have the global
 environment set up with this (because most of our tests will need this). 🐯 So go
-ahead and open the `setup-ava-tests.js` file in the `other/` directory and just
+ahead and open the `setup-test-env.js` file in the `test/helpers/` directory and just
 paste this in:
 
 ```javascript
@@ -559,7 +559,7 @@ and reference the store via `props.store`.
 🐯 Once you've finished that, open the `CustomerList.test.js` file.
 
 You'll notice that in the last test, you have to use `document.createElement`.
-Good thing we already set up the DOM in our `setup-ava-tests.js` so we can do
+Good thing we already set up the DOM in our `setup-tests-env.js` so we can do
 that! The reason we have to is the lifecycle hook `componentDidMount` does not run
 when you use `renderToStaticMarkup` and that's where this component subscribes to
 the store. Same goes for the unsubscription code in `componentWillUnmount`.

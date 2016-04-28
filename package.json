@@ -14,7 +14,7 @@
   "ava": {
     "babel": "inherit",
     "require": [
-      "./test/setup-ava-tests.js"
+      "./test/helpers/setup-test-env.js"
     ]
   },
   "scripts": {
