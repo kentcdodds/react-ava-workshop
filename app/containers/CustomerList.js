@@ -4,7 +4,7 @@ import store from '../store/Customers'
 class CustomerList extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {customers: []}
+    this.state = {customers: [], boss: props.initialBoss || false}
   }
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => this.updateStateWithCustomers())
@@ -16,13 +16,18 @@ class CustomerList extends React.Component {
   updateStateWithCustomers() {
     this.setState({customers: store.getCustomers()})
   }
+  toggleBoss() {
+    const boss = !this.state.boss
+    this.props.onToggleBoss(boss)
+    this.setState({boss})
+  }
   render() {
-    const {customers} = this.state
-    const {boss} = this.props
+    const {customers, boss} = this.state
     const noCustomers = customers.length === 0
     return (
       <div>
         {noCustomers ? <NoCustomers /> : <ListOfCustomers customers={customers} />}
+        <button onClick={() => this.toggleBoss()}>Toggle Boss State</button>
         {boss ? <BossNotice /> : <SalesPersonNotice />}
       </div>
     )
@@ -30,7 +35,8 @@ class CustomerList extends React.Component {
 }
 
 CustomerList.propTypes = {
-  boss: PropTypes.bool.isRequired,
+  initialBoss: PropTypes.bool.isRequired,
+  onToggleBoss: PropTypes.func.isRequired,
 }
 
 function ListOfCustomers({customers}) {
@@ -61,11 +67,11 @@ function Customer({name}) {
 }
 
 function SalesPersonNotice() {
-  return <div>You are a sales person 🤓</div>
+  return <span>You are a sales person 🤓</span>
 }
 
 function BossNotice() {
-  return <div>You are a boss 😎</div>
+  return <span>You are a boss 😎</span>
 }
 
 Customer.propTypes = {
