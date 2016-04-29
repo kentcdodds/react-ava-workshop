@@ -1,42 +1,54 @@
 import test from 'ava'
-import sinon from 'sinon'
-
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
 import {render, unmountComponentAtNode} from 'react-dom'
-
+import {Simulate} from 'react-addons-test-utils'
+import {spy} from 'sinon'
 import CustomerList from './CustomerList'
 
-test('Renders no customers and add button', t => {
-  const output = renderStatic()
-  t.true(output.includes('no customers'))
-  t.false(output.includes('list of customers'))
+test('notice: defaults to sales person', t => {
+  const output = renderToString()
+  t.true(hasSalesPersonNotice(output))
 })
 
-test('Renders customers and add button', t => {
-  const store = {
-    getCustomers: sinon.spy(() => [{name: 'Bob'}, {name: 'Joanna'}]),
-  }
-  const output = renderStatic({store})
-  t.true(output.includes('list of customers'))
-  t.true(output.includes('Bob'))
-  t.true(output.includes('Joanna'))
-  t.false(output.includes('no customers'))
+test('notice: has boss notice when initialBoss is specified', t => {
+  const output = renderToString({initialBoss: true})
+  t.true(hasBossNotice(output))
+})
+
+test('onToggleBoss invoked when the button is clicked', t => {
+  const onToggleBoss = spy()
+  const div = renderToDiv({onToggleBoss})
+  const button = div.getElementsByTagName('button')[0]
+  Simulate.click(button)
+  t.true(onToggleBoss.calledOnce)
+  t.true(hasBossNotice(div.innerHTML))
+})
+
+test('defaults to no customers', t => {
+  const output = renderToString()
+  t.true(hasNoCustomers(output))
+})
+
+
+test('Renders a list of customers with a filled customer list', t => {
+  const customers = [{name: 'Matt'}, {name: 'Luke'}]
+  const {store} = getStoreStub(customers)
+  const div = renderToDiv({store})
+  hasCustomers(t, div, customers)
 })
 
 test('Responds to store updates', t => {
   const {ref, store} = getStoreStub()
   const div = renderToDiv({store})
-  ref.customers = [{name: 'Jill'}, {name: 'Fred'}]
-  ref.callback()
-  const {innerHTML} = div
-  t.true(innerHTML.includes('list of customers'))
-  t.true(innerHTML.includes('Jill'))
-  t.true(innerHTML.includes('Fred'))
-  t.false(innerHTML.includes('no customers'))
+
+  ref.customers = [{name: 'Jamison'}, {name: 'Tyler'}]
+  ref.subscriber()
+
+  hasCustomers(t, div, ref.customers)
 })
 
-test('unsubscribes when unmounted', t => {
+test('Unsubscribes on unmount', t => {
   const {ref, store} = getStoreStub()
   const div = renderToDiv({store})
   unmountComponentAtNode(div)
@@ -44,63 +56,40 @@ test('unsubscribes when unmounted', t => {
 })
 
 
-/**
- * Create a stub for the store which can be used for assertions
- * @returns {Object} - ref property has customers and will haf ref.callback when
- *   store.callback is invoked. store.getCustomers will return ref.customers
- */
-function getStoreStub() {
-  const unsubscribe = sinon.spy()
-  const ref = {customers: [], unsubscribe}
+function hasSalesPersonNotice(string) {
+  return string.includes('🤓')
+}
+
+function hasBossNotice(string) {
+  return string.includes('😎')
+}
+
+function hasNoCustomers(string) {
+  return string.includes('no customers')
+}
+
+function hasCustomers(string, customers) {
+  return string.includes('list of customers') && customers.every(c => string.includes(c.name))
+}
+
+function renderToString(props) {
+  return renderToStaticMarkup(<CustomerList {...props} />)
+}
+
+function renderToDiv(props) {
+  const div = document.createElement('div')
+  render(<CustomerList {...props} />, div)
+  return div
+}
+
+function getStoreStub(customers = []) {
+  const ref = {customers, unsubscribe: spy()}
   const store = {
     getCustomers: () => ref.customers,
-    subscribe: cb => {
-      ref.callback = cb
+    subscribe(subscriber) {
+      ref.subscriber = subscriber
       return ref.unsubscribe
     },
   }
   return {ref, store}
-}
-
-
-/**
- * Render the <CustomerList /> component to a string with the given props
- * @param {Object} props - the props to apply to the <CustomerList /> element
- * @returns {Object} - the rendered string, store, and actions stubs
- */
-function renderStatic(props) {
-  const output = renderToStaticMarkup(
-    <CustomerListWithDefaults {...props} />
-  )
-  return output
-}
-
-/**
- * Render the <CustomerList /> component to a div with the given props
- * @param {Object} props - the props to apply to the <CustomerList /> element
- * @returns {Element} - the div that contains the element
- */
-function renderToDiv(props) {
-  const div = document.createElement('div')
-  render(
-    <CustomerListWithDefaults {...props} />,
-    div,
-  )
-  return div
-}
-
-function CustomerListWithDefaults(props) {
-  const store = {
-    getCustomers: () => [],
-  }
-  const actions = {
-    addCustomer() {},
-  }
-  return (
-    <CustomerList
-      store={store}
-      actions={actions}
-      {...props}
-    />
-  )
 }
