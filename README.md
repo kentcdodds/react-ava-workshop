@@ -1,5 +1,8 @@
 # [React](https://facebook.github.io/react/) + [AVA](https://npmjs.org/package/ava) = ❤️
 
+[![PRs Welcome][prs-badge]][prs]
+[![Donate][donate-badge]][donate]
+
 Find slides [here](http://kcd.im/react-ava)
 
 This is a workshop for learning how to use the [ava](https://npmjs.org/package/ava)
@@ -15,3 +18,7 @@ Good luck!
 
 MIT
 
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prs]: http://makeapullrequest.com
+[donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square
+[donate]: http://kcd.im/donate
