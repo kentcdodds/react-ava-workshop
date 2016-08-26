@@ -4,26 +4,8 @@
   "version": "1.0.0",
   "description": "🐯 A workshop repository for testing React ⚛ with AVA 🚀",
   "main": "index.js",
-  "nyc": {
-    "reporter": [
-      "lcov",
-      "text",
-      "html"
-    ]
-  },
-  "ava": {
-    "babel": "inherit",
-    "require": [
-      "./test/helpers/setup-test-env.js"
-    ]
-  },
   "scripts": {
-    "cover": "nyc npm run test",
-    "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
-    "lint": "eslint .",
-    "test": "ava \"app/**/*.test.js\" --verbose",
-    "watch:test": "npm run test -- --watch",
-    "watch:cover": "nodemon --quiet --watch app --exec npm run cover -s"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -37,22 +19,16 @@
   },
   "homepage": "https://github.com/kentcdodds/react-ava-workshop#readme",
   "devDependencies": {
-    "ava": "0.15.2",
     "babel-core": "6.9.1",
     "babel-eslint": "6.0.4",
     "babel-polyfill": "6.9.1",
     "babel-preset-es2015": "6.9.0",
     "babel-preset-react": "6.5.0",
     "babel-preset-stage-2": "6.5.0",
-    "babel-register": "6.9.0",
     "eslint": "2.12.0",
     "eslint-config-kentcdodds": "6.2.1",
     "eslint-plugin-react": "5.1.1",
-    "jsdom": "9.2.1",
-    "nodemon": "1.9.2",
-    "nyc": "6.6.1",
     "react": "15.1.0",
-    "react-addons-test-utils": "15.1.0",
     "react-dom": "15.1.0",
     "sinon": "1.17.4"
   }
