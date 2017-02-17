@@ -90,7 +90,7 @@ I like to follow :-)
 🐯 Now run `npm run watch:test`
 
 You should get output pretty much like before, only this time, you should notice that the process hasn't stopped. Go to
-one of the test or source files in `app/` and make a change (add a comment or a new line) and safe the file. You should
+one of the test or source files in `app/` and make a change (add a comment or a new line) and save the file. You should
 see AVA re-run only the tests effected by that change. Totally awesome right?!
 
 🐯 Now stop the process with <kbd>CTL</kbd>+<kbd>c</kbd>
@@ -551,7 +551,7 @@ importing a singleton store and using it directly, we specify it as a default pr
 and use it from `this.props`. What's nice about this is it allows us to override
 it for our tests.
 
-If you look at the currently implementation of `CustomerList` in the
+If you look at the current implementation of `CustomerList` in the
 `app/containers` directory, you'll see that it is just using the imported store.
 🐯 Your task is to update `CustomerList.js` component to use `defaultProps` instead
 and reference the store via `props.store`.
